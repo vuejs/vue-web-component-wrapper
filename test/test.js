@@ -95,6 +95,7 @@ test('events', async () => {
     el._shadowRoot.querySelector('button').click()
   })
   expect(await page.evaluate(() => window.emitted)).toBe(true)
+  expect(await page.evaluate(() => window.emittedDetail)).toEqual([123])
 })
 
 test('slots', async () => {

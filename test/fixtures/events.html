@@ -7,8 +7,9 @@ import('../../src/index.js').then(module => {
     </div>`
   }))
   window.el = document.querySelector('my-element')
-  el.addEventListener('foo', () => {
+  el.addEventListener('foo', e => {
     window.emitted = true
+    window.emittedDetail = e.detail
   })
   console.log('ready')
 })
