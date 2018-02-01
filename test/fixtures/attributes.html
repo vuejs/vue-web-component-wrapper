@@ -1,0 +1,23 @@
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script>
+import('../../src/index.js').then(module => {
+  window.customElements.define('my-element', module.default(Vue, {
+    template: `<div>{{ foo }} {{ bar }} {{ someNumber }}</div>`,
+    props: {
+      foo: {
+        type: Boolean
+      },
+      bar: {
+        type: Boolean
+      },
+      someNumber: {
+        type: Number
+      }
+    }
+  }))
+  window.el = document.querySelector('my-element')
+  console.log('ready')
+})
+</script>
+
+<my-element foo="foo" bar="true" some-number="123"></my-element>

@@ -1,0 +1,24 @@
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script>
+import('../../src/index.js').then(module => {
+  window.customElements.define('my-element', module.default(Vue, {
+    template: `<div></div>`,
+    created () {
+      console.log('created')
+    },
+    mounted () {
+      console.log('mounted')
+    },
+    activated () {
+      console.log('activated')
+    },
+    deactivated () {
+      console.log('deactivated')
+    }
+  }))
+  window.el = document.querySelector('my-element')
+  console.log('ready')
+})
+</script>
+
+<my-element></my-element>

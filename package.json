@@ -1,0 +1,49 @@
+{
+  "name": "@vue/web-component-wrapper",
+  "version": "1.0.0",
+  "description": "wrap a vue component as a web component.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/web-component-wrapper.git"
+  },
+  "keywords": [
+    "vue",
+    "web-component"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/web-component-wrapper/issues"
+  },
+  "homepage": "https://github.com/vuejs/web-component-wrapper#readme",
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-plugin-vue-libs": "^2.1.0",
+    "http-server": "^0.11.1",
+    "jest": "^22.1.4",
+    "lint-staged": "^6.1.0",
+    "puppeteer": "^1.0.0",
+    "vue": "^2.5.13",
+    "yorkie": "^1.0.3"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true
+    },
+    "extends": "plugin:vue-libs/recommended"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}
