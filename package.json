@@ -2,10 +2,13 @@
   "name": "@vue/web-component-wrapper",
   "version": "1.0.0",
   "description": "wrap a vue component as a web component.",
-  "main": "src/index.js",
+  "main": "dist/vue-wc-wrapper.js",
+  "unpkg": "dist/vue-wc-wrapper.global.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "build": "rollup -c",
+    "pretest": "yarn build"
   },
   "repository": {
     "type": "git",
@@ -28,6 +31,7 @@
     "jest": "^22.1.4",
     "lint-staged": "^6.1.0",
     "puppeteer": "^1.0.0",
+    "rollup": "^0.55.3",
     "vue": "^2.5.13",
     "yorkie": "^1.0.3"
   },

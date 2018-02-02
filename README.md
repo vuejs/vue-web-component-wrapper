@@ -4,9 +4,27 @@
 
 ## Compatibility
 
-Requires [native ES2015 class support](https://caniuse.com/#feat=es6-class). IE11 and below are not supported.
+**[Requires ES2015 classes](https://caniuse.com/es6-class). IE11 and below not supported.**
+
+- **If targeting browsers that natively supports ES2015, but not native Web Components:**
+
+  You will also need the [Shady DOM + Custom Elements polyfill](https://github.com/webcomponents/webcomponentsjs/blob/master/webcomponents-sd-ce.js).
+
+  See caniuse for support on [Custom Elements v1](https://caniuse.com/#feat=custom-elementsv1) and [Shadow DOM v1](https://caniuse.com/#feat=shadowdomv1).
+
+- **Note on CSS Encapsulation When Using the Shady DOM polyfill**
+
+  It's recommended to use [CSS Modules](https://vue-loader.vuejs.org/en/features/css-modules.html) instead of `<style scoped>` in your `*.vue` files if you intend to use the Shady DOM polyfill, because it does not offer real style encapsulation like Shadow DOM does, so external stylesheets may affect your components if not using hashed class names.
+
+- **If targeting browsers that does not support ES2015:**
+
+  You might want to reconsider since you'll be better off not using Web Components in this case.
 
 ## Usage
+
+- **`dist/vue-wc-wrapper.js`**: This file is in ES modules format. It's the default export for bundlers, and can be used in browsers with `<script type="module">`.
+
+- **`dist/vue-wc-wrapper.global.js`**: This is for old school `<script>` includes in browsers that do not support `<script type="module">` yet (exposes `wrapVueWebComponent` global).
 
 ``` js
 import Vue from 'vue'
