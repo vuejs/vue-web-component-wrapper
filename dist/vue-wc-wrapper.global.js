@@ -127,9 +127,11 @@ function wrap (Vue, Component) {
 
     constructor () {
       super();
+      this.attachShadow({ mode: 'open' });
       const wrapper = this._wrapper = new Vue({
         name: 'shadow-root',
         customElement: this,
+        shadowRoot: this.shadowRoot,
         data () {
           return {
             props: getInitialProps(camelizedPropsList),
@@ -144,8 +146,7 @@ function wrap (Vue, Component) {
         }
       });
 
-      // in Chrome, this.childNodes will be empty when connectedCallback
-      // is fired, so it's necessary to use a mutationObserver
+      // Use MutationObserver to react to slot content change
       const observer = new MutationObserver(() => {
         wrapper.slotChildren = Object.freeze(toVNodes(
           wrapper.$createElement,
@@ -167,8 +168,6 @@ function wrap (Vue, Component) {
     connectedCallback () {
       const wrapper = this._wrapper;
       if (!wrapper._isMounted) {
-        this._shadowRoot = this.attachShadow({ mode: 'open' });
-        wrapper.$options.shadowRoot = this._shadowRoot;
         // initialize children
         wrapper.slotChildren = Object.freeze(toVNodes(
           wrapper.$createElement,
@@ -179,7 +178,7 @@ function wrap (Vue, Component) {
         camelizedPropsList.forEach(key => {
           wrapper.props[key] = this.vueComponent[key];
         });
-        this._shadowRoot.appendChild(wrapper.$el);
+        this.shadowRoot.appendChild(wrapper.$el);
       } else {
         callHooks(this.vueComponent, 'activated');
       }
