@@ -4,11 +4,14 @@
   "description": "wrap a vue component as a web component.",
   "main": "dist/vue-wc-wrapper.js",
   "unpkg": "dist/vue-wc-wrapper.global.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "lint": "eslint src",
     "build": "rollup -c",
-    "pretest": "yarn build"
+    "prepare": "rollup -c"
   },
   "repository": {
     "type": "git",
