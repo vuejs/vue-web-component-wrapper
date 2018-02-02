@@ -8,7 +8,7 @@ export default {
     {
       format: 'iife',
       name: 'wrapVueWebComponent',
-      file: 'dist/vue-wc-wrapper.umd.js'
+      file: 'dist/vue-wc-wrapper.global.js'
     }
   ]
 }
