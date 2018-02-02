@@ -1,17 +1,18 @@
 <script src="../../node_modules/vue/dist/vue.js"></script>
-<script>
-import('../../src/index.js').then(module => {
-  window.customElements.define('my-element', module.default(Vue, {
-    template: `<div>
-      <button @click="$emit('foo', 123)">Emit</button>
-    </div>`
-  }))
-  window.el = document.querySelector('my-element')
-  el.addEventListener('foo', e => {
-    window.emitted = true
-    window.emittedDetail = e.detail
-  })
-  console.log('ready')
+<script type="module">
+import wrap from '../../src/index.js'
+
+customElements.define('my-element', wrap(Vue, {
+  template: `<div>
+    <button @click="$emit('foo', 123)">Emit</button>
+  </div>`
+}))
+
+window.el = document.querySelector('my-element')
+
+el.addEventListener('foo', e => {
+  window.emitted = true
+  window.emittedDetail = e.detail
 })
 </script>
 

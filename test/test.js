@@ -12,14 +12,10 @@ async function launchPage (name) {
   const url = `http://localhost:${port}/test/fixtures/${name}.html`
   const page = await browser.newPage()
   const logs = []
-  const ready = new Promise(resolve => {
-    page.on('console', msg => {
-      logs.push(msg.text())
-      if (msg.text() === `ready`) resolve()
-    })
+  page.on('console', msg => {
+    logs.push(msg.text())
   })
   await page.goto(url)
-  await ready
   return { browser, page, logs }
 }
 
