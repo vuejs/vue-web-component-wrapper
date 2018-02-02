@@ -59,8 +59,7 @@ export default function wrap (Vue, Component) {
         }
       })
 
-      // in Chrome, this.childNodes will be empty when connectedCallback
-      // is fired, so it's necessary to use a mutationObserver
+      // Use MutationObserver to react to slot content change
       const observer = new MutationObserver(() => {
         wrapper.slotChildren = Object.freeze(toVNodes(
           wrapper.$createElement,
