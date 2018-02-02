@@ -10,9 +10,9 @@ export const hyphenate = str => {
 
 export function getInitialProps (propsList) {
   const res = {}
-  for (const key of propsList) {
+  propsList.forEach(key => {
     res[key] = undefined
-  }
+  })
   return res
 }
 
@@ -54,7 +54,11 @@ export function convertAttributeValue (value, name, options) {
 }
 
 export function toVNodes (h, children) {
-  return [].map.call(children, node => toVNode(h, node))
+  const res = []
+  for (let i = 0; i < children.length; i++) {
+    res.push(toVNode(h, children[i]))
+  }
+  return res
 }
 
 function toVNode (h, node) {
@@ -79,7 +83,8 @@ function toVNode (h, node) {
 
 function getAttributes (node) {
   const res = {}
-  for (const attr of node.attributes) {
+  for (let i = 0; i < node.attributes.length; i++) {
+    const attr = node.attributes[i]
     res[attr.nodeName] = attr.nodeValue
   }
   return res

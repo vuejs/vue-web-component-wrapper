@@ -42,17 +42,13 @@ export default function wrap (Vue, Component) {
 
     constructor () {
       super()
-      const el = this
-      this._wrapper = new Vue({
+      const wrapper = this._wrapper = new Vue({
         name: 'shadow-root',
         customElement: this,
         data () {
           return {
             props: getInitialProps(camelizedPropsList),
-            slotChildren: Object.freeze(toVNodes(
-              this.$createElement,
-              el.childNodes
-            ))
+            slotChildren: []
           }
         },
         render (h) {
@@ -66,8 +62,8 @@ export default function wrap (Vue, Component) {
       // in Chrome, this.childNodes will be empty when connectedCallback
       // is fired, so it's necessary to use a mutationObserver
       const observer = new MutationObserver(() => {
-        this._wrapper.slotChildren = Object.freeze(toVNodes(
-          this._wrapper.$createElement,
+        wrapper.slotChildren = Object.freeze(toVNodes(
+          wrapper.$createElement,
           this.childNodes
         ))
       })
@@ -84,15 +80,21 @@ export default function wrap (Vue, Component) {
     }
 
     connectedCallback () {
-      if (!this._wrapper._isMounted) {
+      const wrapper = this._wrapper
+      if (!wrapper._isMounted) {
         this._shadowRoot = this.attachShadow({ mode: 'open' })
-        this._wrapper.$options.shadowRoot = this._shadowRoot
-        this._wrapper.$mount()
+        wrapper.$options.shadowRoot = this._shadowRoot
+        // initialize children
+        wrapper.slotChildren = Object.freeze(toVNodes(
+          wrapper.$createElement,
+          this.childNodes
+        ))
+        wrapper.$mount()
         // sync default props values to wrapper
-        for (const key of camelizedPropsList) {
-          this._wrapper.props[key] = this.vueComponent[key]
-        }
-        this._shadowRoot.appendChild(this._wrapper.$el)
+        camelizedPropsList.forEach(key => {
+          wrapper.props[key] = this.vueComponent[key]
+        })
+        this._shadowRoot.appendChild(wrapper.$el)
       } else {
         callHooks(this.vueComponent, 'activated')
       }
