@@ -39,8 +39,8 @@ function createCustomEvent (name, args) {
 const isBoolean = val => /function Boolean/.test(String(val));
 const isNumber = val => /function Number/.test(String(val));
 
-function convertAttributeValue (value, name, options) {
-  if (isBoolean(options.type)) {
+function convertAttributeValue (value, name, { type } = {}) {
+  if (isBoolean(type)) {
     if (value === 'true' || value === 'false') {
       return value === 'true'
     }
@@ -48,7 +48,7 @@ function convertAttributeValue (value, name, options) {
       return true
     }
     return value != null
-  } else if (isNumber(options.type)) {
+  } else if (isNumber(type)) {
     const parsed = parseFloat(value, 10);
     return isNaN(parsed) ? value : parsed
   } else {
@@ -58,7 +58,7 @@ function convertAttributeValue (value, name, options) {
 
 function toVNodes (h, children) {
   const res = [];
-  for (let i = 0; i < children.length; i++) {
+  for (let i = 0, l = children.length; i < l; i++) {
     res.push(toVNode(h, children[i]));
   }
   return res
@@ -86,7 +86,7 @@ function toVNode (h, node) {
 
 function getAttributes (node) {
   const res = {};
-  for (let i = 0; i < node.attributes.length; i++) {
+  for (let i = 0, l = node.attributes.length; i < l; i++) {
     const attr = node.attributes[i];
     res[attr.nodeName] = attr.nodeValue;
   }
