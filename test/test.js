@@ -88,7 +88,7 @@ test('attributes', async () => {
 test('events', async () => {
   const { page } = await launchPage(`events`)
   await page.evaluate(() => {
-    el._shadowRoot.querySelector('button').click()
+    el.shadowRoot.querySelector('button').click()
   })
   expect(await page.evaluate(() => window.emitted)).toBe(true)
   expect(await page.evaluate(() => window.emittedDetail)).toEqual([123])
@@ -98,7 +98,7 @@ test('slots', async () => {
   const { page } = await launchPage(`slots`)
 
   const content = await page.evaluate(() => {
-    return el._shadowRoot.querySelector('div').innerHTML
+    return el.shadowRoot.querySelector('div').innerHTML
   })
   expect(content).toMatch(`<div>default</div><div>foo</div>`)
 
@@ -107,7 +107,7 @@ test('slots', async () => {
     el.innerHTML = `<div>default2</div><div slot="foo">foo2</div>`
   })
   const newContent = await page.evaluate(() => {
-    return el._shadowRoot.querySelector('div').innerHTML
+    return el.shadowRoot.querySelector('div').innerHTML
   })
   expect(newContent).toMatch(`<div>default2</div><div>foo2</div>`)
 })
