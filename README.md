@@ -6,11 +6,11 @@
 
 **[Requires ES2015 classes](https://caniuse.com/es6-class). IE11 and below not supported.**
 
-- **If targeting browsers that natively supports ES2015, but not native Web Components:**
+- **If targeting browsers that natively support ES2015, but not native Web Components:**
 
   You will also need the [Shady DOM + Custom Elements polyfill](https://github.com/webcomponents/webcomponentsjs/blob/master/webcomponents-sd-ce.js).
 
-  See caniuse for support on [Custom Elements v1](https://caniuse.com/#feat=custom-elementsv1) and [Shadow DOM v1](https://caniuse.com/#feat=shadowdomv1).
+  See caniuse.com for support on [Custom Elements v1](https://caniuse.com/#feat=custom-elementsv1) and [Shadow DOM v1](https://caniuse.com/#feat=shadowdomv1).
 
 - **Note on CSS Encapsulation When Using the Shady DOM polyfill**
 
@@ -39,7 +39,7 @@ const CustomElement = wrap(Vue, Component)
 window.customElements.define('my-element', CustomElement)
 ```
 
-Note it works with async components as well - the async component factory will only be called when an instance of the custom element is created on the page:
+It works with async components as well - you can pass an async component factory function that returns a Promise, and the function will only be called when an instance of the custom element is created on the page:
 
 ``` js
 const CustomElement = wrap(Vue, () => import(`MyComponent.vue`))
