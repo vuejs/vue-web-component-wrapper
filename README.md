@@ -39,6 +39,14 @@ const CustomElement = wrap(Vue, Component)
 window.customElements.define('my-element', CustomElement)
 ```
 
+Note it works with async components as well - the async component factory will only be called when an instance of the custom element is created on the page:
+
+``` js
+const CustomElement = wrap(Vue, () => import(`MyComponent.vue`))
+
+window.customElements.define('my-element', CustomElement)
+```
+
 ## Interface Proxying Details
 
 ### Props
