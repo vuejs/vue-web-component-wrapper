@@ -16,6 +16,11 @@ export function getInitialProps (propsList) {
   return res
 }
 
+export function injectHook (options, key, hook) {
+  options[key] = [].concat(options[key] || [])
+  options[key].unshift(hook)
+}
+
 export function callHooks (vm, hook) {
   if (vm) {
     const hooks = vm.$options[hook] || []

@@ -1,0 +1,32 @@
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script type="module">
+import wrap from '../../src/index.js'
+
+const Component = () => new Promise(resolve => {
+  setTimeout(() => {
+    resolve({
+      template: `<div>{{ foo }} {{ someProp }}</div>`,
+      props: {
+        foo: {
+          type: Number,
+          default: 123
+        },
+        'some-prop': {
+          type: String,
+          default: 'bar'
+        }
+      }
+    })
+    setTimeout(() => {
+      console.log('resolved')
+    }, 0)
+  }, 100)
+})
+
+customElements.define('my-element', wrap(Vue, Component))
+
+window.els = document.querySelectorAll('my-element')
+</script>
+
+<my-element></my-element>
+<my-element foo="234" some-prop="baz"></my-element>

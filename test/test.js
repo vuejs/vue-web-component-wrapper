@@ -1,39 +1,4 @@
-const puppeteer = require('puppeteer')
-const { createServer } = require('http-server')
-
-const port = 3000
-const puppeteerOptions = process.env.CI
-  ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] }
-  : {}
-
-let browser, server
-
-async function launchPage (name) {
-  const url = `http://localhost:${port}/test/fixtures/${name}.html`
-  const page = await browser.newPage()
-  const logs = []
-  page.on('console', msg => {
-    logs.push(msg.text())
-  })
-  await page.goto(url)
-  return { browser, page, logs }
-}
-
-beforeAll(async () => {
-  browser = await puppeteer.launch(puppeteerOptions)
-  server = createServer({ root: process.cwd() })
-  await new Promise((resolve, reject) => {
-    server.listen(port, err => {
-      if (err) return reject(err)
-      resolve()
-    })
-  })
-})
-
-afterAll(async () => {
-  await browser.close()
-  server.close()
-})
+const launchPage = require('./setup')
 
 test('properties', async () => {
   const { page } = await launchPage(`properties`)
@@ -127,4 +92,41 @@ test('lifecycle', async () => {
     document.body.appendChild(el)
   })
   expect(logs).toContain('activated')
+})
+
+test('async', async () => {
+  const { page } = await launchPage(`async`)
+
+  // should not be ready yet
+  expect(await page.evaluate(() => els[0].shadowRoot.querySelector('div'))).toBe(null)
+  expect(await page.evaluate(() => els[1].shadowRoot.querySelector('div'))).toBe(null)
+
+  // wait until component is resolved
+  await new Promise(resolve => {
+    page.on('console', msg => {
+      if (msg.text() === 'resolved') {
+        resolve()
+      }
+    })
+  })
+
+  // both instances should be initialized
+  expect(await page.evaluate(() => els[0].shadowRoot.textContent)).toMatch(`123 bar`)
+  expect(await page.evaluate(() => els[1].shadowRoot.textContent)).toMatch(`234 baz`)
+
+  // attribute sync should work
+  await page.evaluate(() => {
+    els[0].setAttribute('foo', '345')
+  })
+  expect(await page.evaluate(() => els[0].shadowRoot.textContent)).toMatch(`345 bar`)
+
+  // new instance should work
+  await page.evaluate(() => {
+    const newEl = document.createElement('my-element')
+    newEl.setAttribute('foo', '456')
+    document.body.appendChild(newEl)
+  })
+  expect(await page.evaluate(() => {
+    return document.querySelectorAll('my-element')[2].shadowRoot.textContent
+  })).toMatch(`456 bar`)
 })
