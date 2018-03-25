@@ -55,5 +55,8 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "babel-plugin-transform-builtin-classes": "^0.6.1"
   }
 }
