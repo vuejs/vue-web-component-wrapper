@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    ["transform-builtin-classes", {
+      "globals": ["HTMLElement"],
+      "logIfPatched": true 
+    }]
+  ],
+  "presets": [
+    ["env", { "modules": false }]
+  ],
+}
