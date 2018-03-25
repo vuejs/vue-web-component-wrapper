@@ -29,6 +29,7 @@
   "homepage": "https://github.com/vuejs/web-component-wrapper#readme",
   "devDependencies": {
     "babel-core": "^6.22.1",
+    "babel-plugin-transform-builtin-classes": "^0.6.1",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.16.0",
     "eslint-plugin-vue-libs": "^2.1.0",
@@ -55,8 +56,5 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "dependencies": {
-    "babel-plugin-transform-builtin-classes": "^0.6.1"
   }
 }
