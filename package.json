@@ -1,6 +1,6 @@
 {
   "name": "@verticalone/vue-web-component-wrapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrap a Vue component as a web component.",
   "main": "dist/vue-wc-wrapper.js",
   "unpkg": "dist/vue-wc-wrapper.global.js",
@@ -52,5 +52,10 @@
       "eslint --fix",
       "git add"
     ]
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ]
 }

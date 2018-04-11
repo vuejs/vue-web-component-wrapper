@@ -1,79 +1,90 @@
 var wrapVueWebComponent = (function () {
 'use strict';
 
-const camelizeRE = /-(\w)/g;
-const camelize = str => {
-  return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '')
+var camelizeRE = /-(\w)/g;
+var camelize = function camelize(str) {
+  return str.replace(camelizeRE, function (_, c) {
+    return c ? c.toUpperCase() : '';
+  });
 };
 
-const hyphenateRE = /\B([A-Z])/g;
-const hyphenate = str => {
-  return str.replace(hyphenateRE, '-$1').toLowerCase()
+var hyphenateRE = /\B([A-Z])/g;
+var hyphenate = function hyphenate(str) {
+  return str.replace(hyphenateRE, '-$1').toLowerCase();
 };
 
-function getInitialProps (propsList) {
-  const res = {};
-  propsList.forEach(key => {
+function getInitialProps(propsList) {
+  var res = {};
+  propsList.forEach(function (key) {
     res[key] = undefined;
   });
-  return res
+  return res;
 }
 
-function injectHook (options, key, hook) {
+function injectHook(options, key, hook) {
   options[key] = [].concat(options[key] || []);
   options[key].unshift(hook);
 }
 
-function callHooks (vm, hook) {
+function callHooks(vm, hook) {
   if (vm) {
-    const hooks = vm.$options[hook] || [];
-    hooks.forEach(hook => {
+    var hooks = vm.$options[hook] || [];
+    hooks.forEach(function (hook) {
       hook.call(vm);
     });
   }
 }
 
-function createCustomEvent (name, args) {
+function createCustomEvent(name, args) {
   return new CustomEvent(name, {
     bubbles: false,
     cancelable: false,
     detail: args
-  })
+  });
 }
 
-const isBoolean = val => /function Boolean/.test(String(val));
-const isNumber = val => /function Number/.test(String(val));
+var isBoolean = function isBoolean(val) {
+  return (/function Boolean/.test(String(val))
+  );
+};
+var isNumber = function isNumber(val) {
+  return (/function Number/.test(String(val))
+  );
+};
 
-function convertAttributeValue (value, name, { type } = {}) {
+function convertAttributeValue(value, name) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      type = _ref.type;
+
   if (isBoolean(type)) {
     if (value === 'true' || value === 'false') {
-      return value === 'true'
+      return value === 'true';
     }
     if (value === '' || value === name) {
-      return true
+      return true;
     }
-    return value != null
+    return value != null;
   } else if (isNumber(type)) {
-    const parsed = parseFloat(value, 10);
-    return isNaN(parsed) ? value : parsed
+    var parsed = parseFloat(value, 10);
+    return isNaN(parsed) ? value : parsed;
   } else {
-    return value
+    return value;
   }
 }
 
-function toVNodes (h, children) {
-  const res = [];
-  for (let i = 0, l = children.length; i < l; i++) {
+function toVNodes(h, children) {
+  var res = [];
+  for (var i = 0, l = children.length; i < l; i++) {
     res.push(toVNode(h, children[i]));
   }
-  return res
+  return res;
 }
 
-function toVNode (h, node) {
+function toVNode(h, node) {
   if (node.nodeType === 3) {
-    return node.data.trim() ? node.data : null
+    return node.data.trim() ? node.data : null;
   } else if (node.nodeType === 1) {
-    const data = {
+    var data = {
       attrs: getAttributes(node),
       domProps: {
         innerHTML: node.innerHTML
@@ -83,19 +94,19 @@ function toVNode (h, node) {
       data.slot = data.attrs.slot;
       delete data.attrs.slot;
     }
-    return h(node.tagName, data)
+    return h(node.tagName, data);
   } else {
-    return null
+    return null;
   }
 }
 
-function getAttributes (node) {
-  const res = {};
-  for (let i = 0, l = node.attributes.length; i < l; i++) {
-    const attr = node.attributes[i];
+function getAttributes(node) {
+  var res = {};
+  for (var i = 0, l = node.attributes.length; i < l; i++) {
+    var attr = node.attributes[i];
     res[attr.nodeName] = attr.nodeValue;
   }
-  return res
+  return res;
 }
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };

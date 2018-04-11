@@ -15,7 +15,7 @@ export default {
   ],
   plugins: [
     babel({
-      include: 'src/index.js'
+      include: 'src/*.js'
     })
   ]
 }
