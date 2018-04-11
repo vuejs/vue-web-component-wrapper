@@ -1,7 +1,7 @@
 {
-  "name": "@vue/web-component-wrapper",
-  "version": "1.2.0",
-  "description": "wrap a vue component as a web component.",
+  "name": "@verticalone/vue-web-component-wrapper",
+  "version": "1.0.0",
+  "description": "Wrap a Vue component as a web component.",
   "main": "dist/vue-wc-wrapper.js",
   "unpkg": "dist/vue-wc-wrapper.global.js",
   "files": [
@@ -13,20 +13,16 @@
     "build": "rollup -c",
     "prepare": "rollup -c"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vuejs/web-component-wrapper.git"
-  },
+  "repository": "https://github.com/VerticalOne/vue-web-component-wrapper",
   "keywords": [
     "vue",
     "web-component"
   ],
-  "author": "Evan You",
+  "author": "Galen Warren",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vuejs/web-component-wrapper/issues"
+  "publishConfig": {
+    "access": "restricted"
   },
-  "homepage": "https://github.com/vuejs/web-component-wrapper#readme",
   "devDependencies": {
     "babel-core": "^6.22.1",
     "babel-plugin-transform-builtin-classes": "^0.6.1",
