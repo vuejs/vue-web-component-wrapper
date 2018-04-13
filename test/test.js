@@ -16,9 +16,9 @@ test('properties', async () => {
     el.foo = 234
     el.someProp = 'lol'
   })
-  const newFoo = await page.evaluate(()  => el.vueComponent.foo)
+  const newFoo = await page.evaluate(() => el.vueComponent.foo)
   expect(newFoo).toBe(234)
-  const newBar = await page.evaluate(()  => el.vueComponent.someProp)
+  const newBar = await page.evaluate(() => el.vueComponent.someProp)
   expect(newBar).toBe('lol')
 })
 
@@ -37,17 +37,41 @@ test('attributes', async () => {
   const someNumber = await page.evaluate(() => el.someNumber)
   expect(someNumber).toBe(123)
 
+  // aList='[1,2,3]'
+  const aList = await page.evaluate(() => el.aList)
+  expect(aList).toEqual([1, 2, 3])
+
+  // notAList='[]'
+  const notAList = await page.evaluate(() => el.notAList)
+  expect(notAList).toEqual([])
+
+  // anObject='{"a": 1, "b": 2}'
+  const anObject = await page.evaluate(() => el.anObject)
+  expect(anObject).toEqual({ 'a': 1, 'b': 2 })
+
+  // notAnObject='{}'
+  const notAnObject = await page.evaluate(() => el.notAnObject)
+  expect(notAnObject).toEqual({})
+
   // set via attribute
   await page.evaluate(() => {
     el.setAttribute('foo', 'foo')
     el.setAttribute('bar', 'false')
     el.setAttribute('some-number', '234')
+    el.setAttribute('a-list', '[4,5,6]')
+    el.setAttribute('not-a-list', 'invalid JSON')
+    el.setAttribute('an-object', '{"c": 3, "d": 4}')
+    el.setAttribute('not-an-object', 'invalid JSON')
   })
 
   // boolean="boolean"
   expect(await page.evaluate(() => el.foo)).toBe(true)
   expect(await page.evaluate(() => el.bar)).toBe(false)
   expect(await page.evaluate(() => el.someNumber)).toBe(234)
+  expect(await page.evaluate(() => el.aList)).toEqual([4, 5, 6])
+  expect(await page.evaluate(() => el.notAList)).toEqual([])
+  expect(await page.evaluate(() => el.anObject)).toEqual({ 'c': 3, 'd': 4 })
+  expect(await page.evaluate(() => el.notAnObject)).toEqual({})
 })
 
 test('events', async () => {

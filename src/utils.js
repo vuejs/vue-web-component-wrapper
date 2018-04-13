@@ -53,6 +53,20 @@ export function convertAttributeValue (value, name, { type } = {}) {
   } else if (isNumber(type)) {
     const parsed = parseFloat(value, 10)
     return isNaN(parsed) ? value : parsed
+  } else if (type.name == 'Array') {
+    try {
+      var parsed = JSON.parse(value);
+      return parsed && Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+      return [];
+    }
+  } else if (type.name == 'Object') {
+    try {
+      var parsed = JSON.parse(value);
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (err) {
+      return {};
+    }
   } else {
     return value
   }

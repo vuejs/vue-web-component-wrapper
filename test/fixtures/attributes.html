@@ -13,6 +13,24 @@ customElements.define('my-element', wrap(Vue, {
     },
     someNumber: {
       type: Number
+    },
+    aList: {
+      type: Array
+    },
+    notAList: {
+      type: Array,
+      default: function(){
+        return [1,2,3];
+      }
+    },
+    anObject: {
+      type: Object
+    },
+    notAnObject: {
+      type: Object,
+      default: function(){
+        return {'a':1, 'b':2};
+      }
     }
   }
 }))
@@ -20,4 +38,6 @@ customElements.define('my-element', wrap(Vue, {
 window.el = document.querySelector('my-element')
 </script>
 
-<my-element foo="foo" bar="true" some-number="123"></my-element>
+<my-element foo="foo" bar="true" some-number="123"
+a-list="[1,2,3]" not-a-list='invalid JSON this is'
+an-object='{"a": 1, "b": 2}' not-an-object='invalid JSON this is'></my-element>
