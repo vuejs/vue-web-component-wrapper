@@ -8,7 +8,7 @@
 
 - **If targeting browsers that natively support ES2015, but not native Web Components:**
 
-  You will also need the [Shady DOM + Custom Elements polyfill](https://github.com/webcomponents/webcomponentsjs/blob/master/webcomponents-sd-ce.js).
+  You will also need the [Shady DOM + Custom Elements polyfill](https://github.com/webcomponents/webcomponentsjs).
 
   See caniuse.com for support on [Custom Elements v1](https://caniuse.com/#feat=custom-elementsv1) and [Shadow DOM v1](https://caniuse.com/#feat=shadowdomv1).
 
