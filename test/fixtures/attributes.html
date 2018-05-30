@@ -13,6 +13,15 @@ customElements.define('my-element', wrap(Vue, {
     },
     someNumber: {
       type: Number
+    },
+    spit: {
+      type: Boolean
+    },
+    noodle: {
+      type: Object
+    },
+    moreNumber: {
+      type: Number
     }
   }
 }))
@@ -20,4 +29,4 @@ customElements.define('my-element', wrap(Vue, {
 window.el = document.querySelector('my-element')
 </script>
 
-<my-element foo="foo" bar="true" some-number="123"></my-element>
+<my-element foo="foo" bar="true" some-number="123" spit="" noodle='{"fred": "flinstone"}' more-number=""></my-element>

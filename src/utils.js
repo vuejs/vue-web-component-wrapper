@@ -40,9 +40,9 @@ export function createCustomEvent (name, args) {
 
 const isBoolean = val => /function Boolean/.test(String(val))
 const isNumber = val => /function Number/.test(String(val))
-const isObject = val => /function Object/.test(String(val));
+const isObject = val => /function Object/.test(String(val))
 
-function convertAttributeValue (value, name, { type } = {}) {
+export function convertAttributeValue (value, name, { type } = {}) {
   if (isBoolean(type)) {
     if (value === 'true' || value === 'false') {
       return value === 'true'
@@ -54,13 +54,13 @@ function convertAttributeValue (value, name, { type } = {}) {
   } else if (value === '') {
     return null
   } else if (isNumber(type)) {
-    const parsed = parseFloat(value, 10);
+    const parsed = parseFloat(value, 10)
     return isNaN(parsed) ? value : parsed
   } else if (isObject(type) && value !== undefined) {
     try {
       return JSON.parse(value)
     } catch (error) {
-      console.error("Error parsing attribute value from JSON:", value)
+      console.error('Error parsing attribute value from JSON:', value)
       console.error(error)
     }
     return null
