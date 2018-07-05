@@ -9,7 +9,15 @@ import {
   convertAttributeValue
 } from './utils.js'
 
-export default function wrap (Vue, Component) {
+/** @typedef {object} Options
+ * @prop {boolean} [useShadowDOM = true]
+ */
+
+/**
+ * @param {Options} options
+ */
+export default function wrap (Vue, Component, options = {}) {
+  const { useShadowDOM = true } = options
   const isAsync = typeof Component === 'function' && !Component.cid
   let isInitialized = false
   let hyphenatedPropsList
@@ -81,7 +89,7 @@ export default function wrap (Vue, Component) {
   class CustomElement extends HTMLElement {
     constructor () {
       super()
-      this.attachShadow({ mode: 'open' })
+      if (useShadowDOM) this.attachShadow({ mode: 'open' })
 
       const wrapper = this._wrapper = new Vue({
         name: 'shadow-root',
@@ -160,7 +168,9 @@ export default function wrap (Vue, Component) {
           this.childNodes
         ))
         wrapper.$mount()
-        this.shadowRoot.appendChild(wrapper.$el)
+        // render element to DOM
+        if (useShadowDOM) this.shadowRoot.appendChild(wrapper.$el)
+        else this.appendChild(wrapper.$el)
       } else {
         callHooks(this.vueComponent, 'activated')
       }
