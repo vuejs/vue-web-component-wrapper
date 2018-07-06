@@ -98,7 +98,7 @@ function getAttributes (node) {
   return res
 }
 
-function wrap (Vue, Component) {
+function wrap (Vue, Component, Element = HTMLElement) {
   const isAsync = typeof Component === 'function' && !Component.cid;
   let isInitialized = false;
   let hyphenatedPropsList;
@@ -167,7 +167,7 @@ function wrap (Vue, Component) {
     );
   }
 
-  class CustomElement extends HTMLElement {
+  class CustomElement extends Element {
     constructor () {
       super();
       this.attachShadow({ mode: 'open' });
