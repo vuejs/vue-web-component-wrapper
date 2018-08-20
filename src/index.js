@@ -80,13 +80,13 @@ export default function wrap (Vue, Component) {
 
   class CustomElement extends HTMLElement {
     constructor () {
-      super()
-      this.attachShadow({ mode: 'open' })
+      const self = super()
+      self.attachShadow({ mode: 'open' })
 
-      const wrapper = this._wrapper = new Vue({
+      const wrapper = self._wrapper = new Vue({
         name: 'shadow-root',
-        customElement: this,
-        shadowRoot: this.shadowRoot,
+        customElement: self,
+        shadowRoot: self.shadowRoot,
         data () {
           return {
             props: {},
@@ -106,8 +106,8 @@ export default function wrap (Vue, Component) {
         let hasChildrenChange = false
         for (let i = 0; i < mutations.length; i++) {
           const m = mutations[i]
-          if (isInitialized && m.type === 'attributes' && m.target === this) {
-            syncAttribute(this, m.attributeName)
+          if (isInitialized && m.type === 'attributes' && m.target === self) {
+            syncAttribute(self, m.attributeName)
           } else {
             hasChildrenChange = true
           }
@@ -115,11 +115,11 @@ export default function wrap (Vue, Component) {
         if (hasChildrenChange) {
           wrapper.slotChildren = Object.freeze(toVNodes(
             wrapper.$createElement,
-            this.childNodes
+            self.childNodes
           ))
         }
       })
-      observer.observe(this, {
+      observer.observe(self, {
         childList: true,
         subtree: true,
         characterData: true,
