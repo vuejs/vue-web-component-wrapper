@@ -79,8 +79,8 @@ export default function wrap (Vue, Component) {
   }
 
   class CustomElement extends HTMLElement {
-    constructor (...args) {
-      const self = super(...args)
+    constructor () {
+      const self = super()
       self.attachShadow({ mode: 'open' })
 
       const wrapper = self._wrapper = new Vue({
