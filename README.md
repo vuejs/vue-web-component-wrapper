@@ -1,12 +1,20 @@
-# @vue/web-component-wrapper [![CircleCI](https://circleci.com/gh/vuejs/vue-web-component-wrapper.svg?style=shield)](https://circleci.com/gh/vuejs/vue-web-component-wrapper)
-
+# @VerticalOne/vue-web-component-wrapper
 > Wrap and register a Vue component as a custom element.
 
 ## Compatibility
 
-**[Requires ES2015 classes](https://caniuse.com/es6-class). IE11 and below not supported.**
+This is a fork of [vuejs/vue-web-component-wrapper](https://github.com/vuejs/vue-web-component-wrapper) which **extends support to IE11** through babel transpilation with the [babel-plugin-transform-builtin-classes](https://github.com/WebReflection/babel-plugin-transform-builtin-classes) plugin that was created to address the issue of extending `HTMLElement` in browsers without native support for ES2015 classes.
 
-- **If targeting browsers that natively support ES2015, but not native Web Components:**
+If you're running into this [issue](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#npm-run-build-fails-to-minify) -- i.e. "Failed to minify the code from this file" -- trying to minify code from the original project, this fork may also help you out, as all the code is transpiled to ES5.
+
+**Requires IE11 or higher, from the plugin [docs](https://github.com/WebReflection/babel-plugin-transform-builtin-classes)**:
+> This transformer works on IE11 and every other browser with Object.setPrototypeOf or \_\_proto\_\_ as fallback.
+
+> There is NO IE <= 10 support. If you need IE <= 10 don't use this plugin and/or don't extend natives (recommended).
+
+Other notes:
+
+- **If targeting browsers that don't support native Web Components:**
 
   You will also need the [Shady DOM + Custom Elements polyfill](https://github.com/webcomponents/webcomponentsjs).
 
@@ -15,10 +23,6 @@
 - **Note on CSS Encapsulation When Using the Shady DOM polyfill**
 
   It's recommended to use [CSS Modules](https://vue-loader.vuejs.org/en/features/css-modules.html) instead of `<style scoped>` in your `*.vue` files if you intend to use the Shady DOM polyfill, because it does not offer real style encapsulation like Shadow DOM does, so external stylesheets may affect your components if not using hashed class names.
-
-- **If targeting browsers that does not support ES2015:**
-
-  You might want to reconsider since you'll be better off not using Web Components in this case.
 
 ## Usage
 
