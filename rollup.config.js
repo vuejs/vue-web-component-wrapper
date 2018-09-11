@@ -1,24 +1,31 @@
 import babel from 'rollup-plugin-babel'
 
-export default {
-  input: 'src/index.js',
-  output: [
-    {
-      format: 'es',
-      file: 'dist/vue-wc-wrapper.js'
-    },
-    {
-      format: 'iife',
-      name: 'wrapVueWebComponent',
-      file: 'dist/vue-wc-wrapper.global.js'
-    },
-    {
-      format: 'iife',
-      name: 'wrapVueWebComponent',
-      file: 'dist/vue-wc-wrapper.ie11.js',
-      plugins: [
-        babel()
-      ]
-    }
-  ]
-}
+export default [
+  {
+    input: 'src/index.js',
+    output: [
+      {
+        format: 'es',
+        file: 'dist/vue-wc-wrapper.js'
+      },
+      {
+        format: 'iife',
+        name: 'wrapVueWebComponent',
+        file: 'dist/vue-wc-wrapper.global.js'
+      }
+    ]
+  },
+  {
+    input: 'src/index.js',
+    output: [
+      {
+        format: 'iife',
+        name: 'wrapVueWebComponent',
+        file: 'dist/vue-wc-wrapper.ie11.js'
+      }
+    ],
+    plugins: [
+      babel()
+    ]
+  }
+]
