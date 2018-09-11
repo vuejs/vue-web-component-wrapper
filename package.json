@@ -56,5 +56,8 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "babel-core": "^6.26.3"
   }
 }
