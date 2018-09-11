@@ -4,8 +4,6 @@
 
 ## Compatibility
 
-**[Requires ES2015 classes](https://caniuse.com/es6-class). IE11 and below not supported.**
-
 - **If targeting browsers that natively support ES2015, but not native Web Components:**
 
   You will also need the [Shady DOM + Custom Elements polyfill](https://github.com/webcomponents/webcomponentsjs).
@@ -18,7 +16,7 @@
 
 - **If targeting browsers that does not support ES2015:**
 
-  You might want to reconsider since you'll be better off not using Web Components in this case.
+  Leverage the `dist/vue-wc-wrapper.es5.js` version of the library.
 
 ## Usage
 

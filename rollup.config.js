@@ -21,7 +21,7 @@ export default [
       {
         format: 'iife',
         name: 'wrapVueWebComponent',
-        file: 'dist/vue-wc-wrapper.ie11.js'
+        file: 'dist/vue-wc-wrapper.es5.js'
       }
     ],
     plugins: [
