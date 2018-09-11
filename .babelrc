@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    "babel-plugin-transform-custom-element-classes"
+  ],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": {
+          "ie": "11"
+        }
+      }
+    ]
+  ]
+}
