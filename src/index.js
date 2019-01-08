@@ -24,7 +24,8 @@ export default function wrap (Vue, Component) {
       ? Component.options
       : Component
 
-    options.props = spreadProps(options)
+      //spread props
+     options.props = spreadProps(options)
     // extract props info
     const propsList = Array.isArray(options.props)
       ? options.props
