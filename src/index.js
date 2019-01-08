@@ -6,7 +6,8 @@ import {
   injectHook,
   getInitialProps,
   createCustomEvent,
-  convertAttributeValue
+  convertAttributeValue,
+  spreadProps
 } from './utils.js'
 
 export default function wrap (Vue, Component) {
@@ -23,6 +24,7 @@ export default function wrap (Vue, Component) {
       ? Component.options
       : Component
 
+    options.props = spreadProps(options)
     // extract props info
     const propsList = Array.isArray(options.props)
       ? options.props

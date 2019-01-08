@@ -94,3 +94,23 @@ function getAttributes (node) {
   }
   return res
 }
+
+export function spreadProps (component) {
+  const result = {}
+  appendProps(result, component)
+  console.log(result)
+  return result
+}
+
+function appendProps (result, component) {
+  for (const key in component.props) {
+    const camelKey = camelize(key)
+    if (!(camelKey in result)) {
+      result[camelKey] = component.props[key]
+    }
+  }
+
+  if (component.extends) {
+    appendProps(result, component.extends)
+  }
+}
