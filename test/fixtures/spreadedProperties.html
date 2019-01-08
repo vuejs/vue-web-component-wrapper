@@ -2,50 +2,48 @@
 <script type="module">
     import wrap from '../../src/index.js';
 
-    var mixin = {
+    var mixin0 = {
         props: {
-            m1: {
+            m0: {
                 type: String,
-                default: 'abas'
+                default: 'm0'
+            }
+        }
+    };
+    var mixin1 = {
+        props: {
+            'm-1': {
+                type: String,
+                default: 'm1'
             }
         }
     };
 
     var Parent0 = {
-        mixins:[mixin],
+        mixins:[mixin0, mixin1],
         props: {
-            p2: {
+            p0: {
                 type: String,
-                default: 'Li'
+                default: 'p0'
             }
         }
     };
     var Parent1 = {
         extends: Parent0,
         props: {
-            p1: {
+            'p-1': {
                 type: String,
-                default: 'Jiang'
+                default: 'p1'
             }
         }
     };
 
     customElements.define('my-element', wrap(Vue, {
         extends: Parent1,
-        template: `<div>{{ foo }} {{ someProp }} {{p1}} {{p2}} {{m1}}</div>`,
-        props: {
-            foo: {
-                type: Number,
-                default: 123
-            },
-            'some-prop': {
-                type: String,
-                default: 'bar'
-            }
-        }
+        template: `<div> {{p0}} {{p1}} {{m0}} {{m1}}</div>`,
     }));
 
     window.el = document.querySelector('my-element');
 </script>
 
-<my-element p1="hhh" m1="ggg"></my-element>
+<my-element></my-element>
