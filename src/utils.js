@@ -109,8 +109,24 @@ function appendProps (result, component) {
       result[camelKey] = component.props[key]
     }
   }
-
+  if (component.mixins) {
+    appendMixinsProps(result, component.mixins)
+  }
   if (component.extends) {
     appendProps(result, component.extends)
   }
 }
+
+function appendMixinsProps (result, mixins) {
+  mixins.forEach(function (mixin) {
+    if (mixin.props) {
+      for (const key in mixin.props) {
+        const camelKey = camelize(key)
+        if (!(camelKey in result)) {
+          result[camelKey] = mixin.props[key]
+        }
+      }
+    }
+  })
+}
+

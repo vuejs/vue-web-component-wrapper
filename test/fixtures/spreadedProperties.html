@@ -1,41 +1,51 @@
 <script src="../../node_modules/vue/dist/vue.js"></script>
 <script type="module">
-import wrap from '../../src/index.js'
+    import wrap from '../../src/index.js';
 
-var Parent0 = {
-    props: {
-        p2: {
-            type: String,
-            default: "Li"
-        },
-    }
-}
-var Parent1 = {
-    extends: Parent0,
-    props: {
-        p1: {
-            type: String,
-            default: "Jiang"
-        },
-    }
-}
+    var mixin = {
+        props: {
+            m1: {
+                type: String,
+                default: 'abas'
+            }
+        }
+    };
 
-customElements.define('my-element', wrap(Vue, {
-    extends: Parent1,
-  template: `<div>{{ foo }} {{ someProp }} {{p1}} {{p2}}</div>`,
-  props: {
-    foo: {
-      type: Number,
-      default: 123
-    },
-    'some-prop': {
-      type: String,
-      default: 'bar'
-    }
-  }
-}))
+    var Parent0 = {
+        mixins:[mixin],
+        props: {
+            p2: {
+                type: String,
+                default: 'Li'
+            }
+        }
+    };
+    var Parent1 = {
+        extends: Parent0,
+        props: {
+            p1: {
+                type: String,
+                default: 'Jiang'
+            }
+        }
+    };
 
-window.el = document.querySelector('my-element')
+    customElements.define('my-element', wrap(Vue, {
+        extends: Parent1,
+        template: `<div>{{ foo }} {{ someProp }} {{p1}} {{p2}} {{m1}}</div>`,
+        props: {
+            foo: {
+                type: Number,
+                default: 123
+            },
+            'some-prop': {
+                type: String,
+                default: 'bar'
+            }
+        }
+    }));
+
+    window.el = document.querySelector('my-element');
 </script>
 
-<my-element p1="hhh"></my-element>
+<my-element p1="hhh" m1="ggg"></my-element>
