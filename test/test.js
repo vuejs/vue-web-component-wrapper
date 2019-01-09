@@ -16,10 +16,74 @@ test('properties', async () => {
     el.foo = 234
     el.someProp = 'lol'
   })
-  const newFoo = await page.evaluate(()  => el.vueComponent.foo)
+  const newFoo = await page.evaluate(() => el.vueComponent.foo)
   expect(newFoo).toBe(234)
-  const newBar = await page.evaluate(()  => el.vueComponent.someProp)
+  const newBar = await page.evaluate(() => el.vueComponent.someProp)
   expect(newBar).toBe('lol')
+})
+
+test('spreadedProperties', async () => {
+  const { page } = await launchPage(`spreadedProperties`)
+
+  // props from 'extends'
+  const p0 = await page.evaluate(() => el.p0)
+  expect(p0).toBe(undefined)
+
+  // props from 'extends'
+  const p1 = await page.evaluate(() => el.p1)
+  expect(p1).toBe('p1')
+
+  // props from 'mixins'
+  const m0 = await page.evaluate(() => el.m0)
+  expect(m0).toBe('m0')
+
+  // props from 'mixins'
+  const m1 = await page.evaluate(() => el.m1)
+  expect(m1).toBe('m1')
+
+  // array props
+  const c1 = await page.evaluate(() => el.c1)
+  const c2 = await page.evaluate(() => el.c2)
+  const m2a = await page.evaluate(() => el.m2a)
+  const m2b = await page.evaluate(() => el.m2b)
+  expect(c1).toBe(undefined)
+  expect(c2).toBe(undefined)
+  expect(m2a).toBe(undefined)
+  expect(m2b).toBe(undefined)
+
+  // props proxying: set
+  await page.evaluate(() => {
+    el.p0 = 'new-p0'
+    el.p1 = 'new-p1'
+    el.m0 = 'new-m0'
+    el.m1 = 'new-m1'
+    el.c1 = 'new-c1'
+    el.m2a = 'new-m2a'
+  })
+  const newP0 = await page.evaluate(() => el.vueComponent.p0)
+  expect(newP0).toBe('new-p0')
+  const newP1 = await page.evaluate(() => el.vueComponent.p1)
+  expect(newP1).toBe('new-p1')
+  const newM0 = await page.evaluate(() => el.vueComponent.m0)
+  expect(newM0).toBe('new-m0')
+  const newM1 = await page.evaluate(() => el.vueComponent.m1)
+  expect(newM1).toBe('new-m1')
+  const newC1 = await page.evaluate(() => el.vueComponent.c1)
+  expect(newC1).toBe('new-c1')
+  const newM2a = await page.evaluate(() => el.vueComponent.m2a)
+  expect(newM2a).toBe('new-m2a')
+
+  // set via attribute
+  await page.evaluate(() => {
+    el.setAttribute('c1', 'foo')
+    el.setAttribute('p1', 'foo2')
+    el.setAttribute('m1', 'bar')
+    el.setAttribute('m2a', 'bla')
+  })
+  expect(await page.evaluate(() => el.c1)).toBe('foo')
+  expect(await page.evaluate(() => el.p1)).toBe('foo2')
+  expect(await page.evaluate(() => el.m1)).toBe('bar')
+  expect(await page.evaluate(() => el.m2a)).toBe('bla')
 })
 
 test('attributes', async () => {

@@ -94,3 +94,52 @@ function getAttributes (node) {
   }
   return res
 }
+
+export function spreadProps (component) {
+  const result = {}
+  spreadNext(result, component)
+  return result
+}
+
+function spreadNext (result, component) {
+  if (component.props) {
+    appendProps(result, component.props)
+  }
+
+  if (component.mixins) {
+    component.mixins.forEach(function (mixin) {
+      spreadNext(result, mixin)
+    })
+  }
+  if (component.extends) {
+    spreadNext(result, component.extends)
+  }
+}
+
+function appendProps (result, props) {
+  if (Array.isArray(props)) {
+    processArrayProps(result, props)
+  } else {
+    processObjectProps(result, props)
+  }
+}
+
+function processObjectProps (result, props) {
+  for (const key in props) {
+    const camelKey = camelize(key)
+    if (!(camelKey in result)) {
+      result[camelKey] = props[key]
+    }
+  }
+}
+function processArrayProps (result, props) {
+  props.forEach(function (prop) {
+    if (typeof prop === 'string') {
+      const camelKey = camelize(prop)
+      if (!(camelKey in result)) {
+        result[camelKey] = undefined
+      }
+    }
+  })
+}
+

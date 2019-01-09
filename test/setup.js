@@ -20,6 +20,7 @@ module.exports = async function launchPage (name) {
 }
 
 beforeAll(async () => {
+  jest.setTimeout(10000)
   browser = await puppeteer.launch(puppeteerOptions)
   server = createServer({ root: process.cwd() })
   await new Promise((resolve, reject) => {

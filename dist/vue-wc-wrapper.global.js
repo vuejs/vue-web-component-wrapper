@@ -98,6 +98,54 @@ function getAttributes (node) {
   return res
 }
 
+function spreadProps (component) {
+  const result = {};
+  spreadNext(result, component);
+  return result
+}
+
+function spreadNext (result, component) {
+  if (component.props) {
+    appendProps(result, component.props);
+  }
+
+  if (component.mixins) {
+    component.mixins.forEach(function (mixin) {
+      spreadNext(result, mixin);
+    });
+  }
+  if (component.extends) {
+    spreadNext(result, component.extends);
+  }
+}
+
+function appendProps (result, props) {
+  if (Array.isArray(props)) {
+    processArrayProps(result, props);
+  } else {
+    processObjectProps(result, props);
+  }
+}
+
+function processObjectProps (result, props) {
+  for (const key in props) {
+    const camelKey = camelize(key);
+    if (!(camelKey in result)) {
+      result[camelKey] = props[key];
+    }
+  }
+}
+function processArrayProps (result, props) {
+  props.forEach(function (prop) {
+    if (typeof prop === 'string') {
+      const camelKey = camelize(prop);
+      if (!(camelKey in result)) {
+        result[camelKey] = undefined;
+      }
+    }
+  });
+}
+
 function wrap (Vue, Component) {
   const isAsync = typeof Component === 'function' && !Component.cid;
   let isInitialized = false;
@@ -112,13 +160,13 @@ function wrap (Vue, Component) {
       ? Component.options
       : Component;
 
+    // spread props
+    options.props = spreadProps(options);
     // extract props info
-    const propsList = Array.isArray(options.props)
-      ? options.props
-      : Object.keys(options.props || {});
+    const propsList = Object.keys(options.props || {});
     hyphenatedPropsList = propsList.map(hyphenate);
     camelizedPropsList = propsList.map(camelize);
-    const originalPropsAsObject = Array.isArray(options.props) ? {} : options.props || {};
+    const originalPropsAsObject = options.props || {};
     camelizedPropsMap = camelizedPropsList.reduce((map, key, i) => {
       map[key] = originalPropsAsObject[propsList[i]];
       return map
@@ -169,13 +217,13 @@ function wrap (Vue, Component) {
 
   class CustomElement extends HTMLElement {
     constructor () {
-      super();
-      this.attachShadow({ mode: 'open' });
+      const self = super();
+      self.attachShadow({ mode: 'open' });
 
-      const wrapper = this._wrapper = new Vue({
+      const wrapper = self._wrapper = new Vue({
         name: 'shadow-root',
-        customElement: this,
-        shadowRoot: this.shadowRoot,
+        customElement: self,
+        shadowRoot: self.shadowRoot,
         data () {
           return {
             props: {},
@@ -195,8 +243,8 @@ function wrap (Vue, Component) {
         let hasChildrenChange = false;
         for (let i = 0; i < mutations.length; i++) {
           const m = mutations[i];
-          if (isInitialized && m.type === 'attributes' && m.target === this) {
-            syncAttribute(this, m.attributeName);
+          if (isInitialized && m.type === 'attributes' && m.target === self) {
+            syncAttribute(self, m.attributeName);
           } else {
             hasChildrenChange = true;
           }
@@ -204,11 +252,11 @@ function wrap (Vue, Component) {
         if (hasChildrenChange) {
           wrapper.slotChildren = Object.freeze(toVNodes(
             wrapper.$createElement,
-            this.childNodes
+            self.childNodes
           ));
         }
       });
-      observer.observe(this, {
+      observer.observe(self, {
         childList: true,
         subtree: true,
         characterData: true,
