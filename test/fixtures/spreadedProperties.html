@@ -18,9 +18,12 @@
             }
         }
     };
+    var mixin2 = {
+        props: ['m2a', 'm2b']
+    };
 
     var Parent0 = {
-        mixins:[mixin0, mixin1],
+        mixins:[mixin0, mixin1, mixin2],
         props: {
             p0: {
                 type: String,
@@ -40,10 +43,11 @@
 
     customElements.define('my-element', wrap(Vue, {
         extends: Parent1,
-        template: `<div> {{p0}} {{p1}} {{m0}} {{m1}}</div>`,
+        props:['c1', 'c2'],
+        template: `<div> {{p0}} {{p1}} {{m0}} {{m1}} {{c1}}{{c2}}{{c3}}{{m2a}} {{m2b}} {{m2c}}</div>`,
     }));
 
     window.el = document.querySelector('my-element');
 </script>
 
-<my-element></my-element>
+<my-element ></my-element>

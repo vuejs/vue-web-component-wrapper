@@ -41,12 +41,24 @@ test('spreadedProperties', async () => {
   const m1 = await page.evaluate(() => el.m1)
   expect(m1).toBe('m1')
 
+  // array props
+  const c1 = await page.evaluate(() => el.c1)
+  const c2 = await page.evaluate(() => el.c2)
+  const m2a = await page.evaluate(() => el.m2a)
+  const m2b = await page.evaluate(() => el.m2b)
+  expect(c1).toBe(undefined)
+  expect(c2).toBe(undefined)
+  expect(m2a).toBe(undefined)
+  expect(m2b).toBe(undefined)
+
   // props proxying: set
   await page.evaluate(() => {
     el.p0 = 'new-p0'
     el.p1 = 'new-p1'
     el.m0 = 'new-m0'
     el.m1 = 'new-m1'
+    el.c1 = 'new-c1'
+    el.m2a = 'new-m2a'
   })
   const newP0 = await page.evaluate(() => el.vueComponent.p0)
   expect(newP0).toBe('new-p0')
@@ -56,6 +68,20 @@ test('spreadedProperties', async () => {
   expect(newM0).toBe('new-m0')
   const newM1 = await page.evaluate(() => el.vueComponent.m1)
   expect(newM1).toBe('new-m1')
+  const newC1 = await page.evaluate(() => el.vueComponent.c1)
+  expect(newC1).toBe('new-c1')
+  const newM2a = await page.evaluate(() => el.vueComponent.m2a)
+  expect(newM2a).toBe('new-m2a')
+
+  // set via attribute
+  await page.evaluate(() => {
+    el.setAttribute('c1', 'foo')
+    el.setAttribute('m1', 'bar')
+    el.setAttribute('m2a', 'bla')
+  })
+  expect(await page.evaluate(() => el.c1)).toBe('foo')
+  expect(await page.evaluate(() => el.m1)).toBe('bar')
+  expect(await page.evaluate(() => el.m2a)).toBe('bla')
 })
 
 test('attributes', async () => {

@@ -100,34 +100,47 @@ var wrapVueWebComponent = (function () {
 
   function spreadProps (component) {
     const result = {}
-    appendProps(result, component)
-    console.log(result)
+    spreadNext(result, component)
     return result
   }
 
-  function appendProps (result, component) {
-    for (const key in component.props) {
-      const camelKey = camelize(key)
-      if (!(camelKey in result)) {
-        result[camelKey] = component.props[key]
-      }
+  function spreadNext (result, component) {
+    if (component.props) {
+      appendProps(result, component.props)
     }
+
     if (component.mixins) {
-      appendMixinsProps(result, component.mixins)
+      component.mixins.forEach(function (mixin) {
+        spreadNext(result, mixin)
+      })
     }
     if (component.extends) {
-      appendProps(result, component.extends)
+      spreadNext(result, component.extends)
     }
   }
 
-  function appendMixinsProps (result, mixins) {
-    mixins.forEach(function (mixin) {
-      if (mixin.props) {
-        for (const key in mixin.props) {
-          const camelKey = camelize(key)
-          if (!(camelKey in result)) {
-            result[camelKey] = mixin.props[key]
-          }
+  function appendProps (result, props) {
+    if (Array.isArray(props)) {
+      processArrayProps(result, props)
+    } else {
+      processObjectProps(result, props)
+    }
+  }
+
+  function processObjectProps (result, props) {
+    for (const key in props) {
+      const camelKey = camelize(key)
+      if (!(camelKey in result)) {
+        result[camelKey] = props[key]
+      }
+    }
+  }
+  function processArrayProps (result, props) {
+    props.forEach(function (prop) {
+      if (typeof prop === 'string') {
+        const camelKey = camelize(prop)
+        if (!(camelKey in result)) {
+          result[camelKey] = undefined
         }
       }
     })
@@ -150,12 +163,10 @@ var wrapVueWebComponent = (function () {
       // spread props
       options.props = spreadProps(options)
       // extract props info
-      const propsList = Array.isArray(options.props)
-        ? options.props
-        : Object.keys(options.props || {})
+      const propsList = Object.keys(options.props || {})
       hyphenatedPropsList = propsList.map(hyphenate)
       camelizedPropsList = propsList.map(camelize)
-      const originalPropsAsObject = Array.isArray(options.props) ? {} : options.props || {}
+      const originalPropsAsObject = options.props || {}
       camelizedPropsMap = camelizedPropsList.reduce((map, key, i) => {
         map[key] = originalPropsAsObject[propsList[i]]
         return map
