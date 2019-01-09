@@ -1,6 +1,6 @@
 {
   "name": "@vue/web-component-wrapper",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "wrap a vue component as a web component.",
   "main": "dist/vue-wc-wrapper.js",
   "unpkg": "dist/vue-wc-wrapper.global.js",
