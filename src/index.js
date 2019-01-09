@@ -27,12 +27,10 @@ export default function wrap (Vue, Component) {
     // spread props
     options.props = spreadProps(options)
     // extract props info
-    const propsList = Array.isArray(options.props)
-      ? options.props
-      : Object.keys(options.props || {})
+    const propsList = Object.keys(options.props || {})
     hyphenatedPropsList = propsList.map(hyphenate)
     camelizedPropsList = propsList.map(camelize)
-    const originalPropsAsObject = Array.isArray(options.props) ? {} : options.props || {}
+    const originalPropsAsObject = options.props || {}
     camelizedPropsMap = camelizedPropsList.reduce((map, key, i) => {
       map[key] = originalPropsAsObject[propsList[i]]
       return map
