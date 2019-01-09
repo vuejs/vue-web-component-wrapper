@@ -27,7 +27,7 @@ test('spreadedProperties', async () => {
 
   // props from 'extends'
   const p0 = await page.evaluate(() => el.p0)
-  expect(p0).toBe('p0')
+  expect(p0).toBe(undefined)
 
   // props from 'extends'
   const p1 = await page.evaluate(() => el.p1)
@@ -76,10 +76,12 @@ test('spreadedProperties', async () => {
   // set via attribute
   await page.evaluate(() => {
     el.setAttribute('c1', 'foo')
+    el.setAttribute('p1', 'foo2')
     el.setAttribute('m1', 'bar')
     el.setAttribute('m2a', 'bla')
   })
   expect(await page.evaluate(() => el.c1)).toBe('foo')
+  expect(await page.evaluate(() => el.p1)).toBe('foo2')
   expect(await page.evaluate(() => el.m1)).toBe('bar')
   expect(await page.evaluate(() => el.m2a)).toBe('bla')
 })
