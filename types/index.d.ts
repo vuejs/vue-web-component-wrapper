@@ -1,8 +1,8 @@
-import * as VueJS from 'vue'
+import _Vue, { Component } from 'vue'
 
 declare function wrap(
-  Vue: VueJS.default,
-  Component: VueJS.VueConstructor<VueJS.default>
+  Vue: typeof _Vue,
+  Component: Component
 ): HTMLElement
 
 export default wrap
