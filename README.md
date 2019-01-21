@@ -65,7 +65,11 @@ window.customElements.define('my-element', CustomElement)
 
   - `"false"` -> `false`
 
+- Attributes with an empty string  `""` value and aren't declared with `type: Boolean` are auto-casted to `null`.
+
 - Attributes that map to props declared with `type: Number` are auto-casted into numbers if the value is a parsable number.
+
+- Attributes that map to props declared with `type: Object` and are given a string value are auto-casted into objects by parsing the string as JSON (if valid JSON). 
 
 ### Events
 

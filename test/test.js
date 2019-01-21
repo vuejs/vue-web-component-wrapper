@@ -37,6 +37,18 @@ test('attributes', async () => {
   const someNumber = await page.evaluate(() => el.someNumber)
   expect(someNumber).toBe(123)
 
+  // spit=""
+  const spit = await page.evaluate(() => el.spit)
+  expect(spit).toBe(true)
+
+  // noodle='{"fred": "flinstone"}'
+  const noodle = await page.evaluate(() => el.noodle)
+  expect(noodle).toEqual({ fred: 'flinstone' })
+
+  // more-number=""
+  const moreNumber = await page.evaluate(() => el.moreNumber)
+  expect(moreNumber).toBe(null)
+
   // set via attribute
   await page.evaluate(() => {
     el.setAttribute('foo', 'foo')
