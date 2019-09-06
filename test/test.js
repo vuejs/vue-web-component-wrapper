@@ -1,3 +1,4 @@
+/* global test expect el els */
 const launchPage = require('./setup')
 
 test('properties', async () => {
@@ -16,9 +17,9 @@ test('properties', async () => {
     el.foo = 234
     el.someProp = 'lol'
   })
-  const newFoo = await page.evaluate(()  => el.vueComponent.foo)
+  const newFoo = await page.evaluate(() => el.vueComponent.foo)
   expect(newFoo).toBe(234)
-  const newBar = await page.evaluate(()  => el.vueComponent.someProp)
+  const newBar = await page.evaluate(() => el.vueComponent.someProp)
   expect(newBar).toBe('lol')
 })
 
@@ -32,6 +33,10 @@ test('attributes', async () => {
   // boolean="true"
   const bar = await page.evaluate(() => el.bar)
   expect(bar).toBe(true)
+
+  // absence of boolean with default: true
+  const baz = await page.evaluate(() => el.baz)
+  expect(baz).toBe(true)
 
   // some-number="123"
   const someNumber = await page.evaluate(() => el.someNumber)

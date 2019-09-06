@@ -1,6 +1,6 @@
 <script src="../../node_modules/vue/dist/vue.js"></script>
 <script type="module">
-import wrap from '../../src/index.js'
+  import wrap from '../../src/index.js'
 
 customElements.define('my-element', wrap(Vue, {
   template: `<div>{{ foo }} {{ bar }} {{ someNumber }}</div>`,
@@ -10,6 +10,10 @@ customElements.define('my-element', wrap(Vue, {
     },
     bar: {
       type: Boolean
+    },
+    baz: {
+      type: Boolean,
+      default: true
     },
     someNumber: {
       type: Number
