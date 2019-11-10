@@ -142,14 +142,6 @@ export default function wrap (Vue, Component) {
           })
         }
 
-        const syncProperties = () => {
-          camelizedPropsList.forEach(prop => {
-            if (typeof this[prop] !== 'undefined') {
-              wrapper.props[prop] = this[prop]
-            }
-          })
-        }
-
         if (isInitialized) {
           syncInitialAttributes()
         } else {
@@ -160,7 +152,12 @@ export default function wrap (Vue, Component) {
             }
             initialize(resolved)
             syncInitialAttributes()
-            syncProperties()
+            // sync existing element properties with props
+            camelizedPropsList.forEach(prop => {
+              if (typeof this[prop] !== 'undefined') {
+                wrapper.props[prop] = this[prop]
+              }
+            })
           })
         }
         // initialize children
