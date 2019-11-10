@@ -16,9 +16,9 @@ test('properties', async () => {
     el.foo = 234
     el.someProp = 'lol'
   })
-  const newFoo = await page.evaluate(()  => el.vueComponent.foo)
+  const newFoo = await page.evaluate(() => el.vueComponent.foo)
   expect(newFoo).toBe(234)
-  const newBar = await page.evaluate(()  => el.vueComponent.someProp)
+  const newBar = await page.evaluate(() => el.vueComponent.someProp)
   expect(newBar).toBe('lol')
 })
 
@@ -113,6 +113,9 @@ test('async', async () => {
   // both instances should be initialized
   expect(await page.evaluate(() => els[0].shadowRoot.textContent)).toMatch(`123 bar`)
   expect(await page.evaluate(() => els[1].shadowRoot.textContent)).toMatch(`234 baz`)
+
+  // props assigned as node properties should be synced
+  expect(await page.evaluate(() => els[1].shadowRoot.textContent)).toMatch(`apple`)
 
   // attribute sync should work
   await page.evaluate(() => {

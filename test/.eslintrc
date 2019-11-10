@@ -1,0 +1,9 @@
+{
+    "env": {
+        "jest": true
+    },
+    "globals": {
+        "el": true,
+        "els": true
+    }
+}
