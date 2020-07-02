@@ -1,0 +1,23 @@
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script type="module">
+import wrap from '../../src/index.js'
+
+window.MyElement = wrap(Vue, {
+  template: `<div>{{ foo }} {{ someProp }}</div>`,
+  props: {
+    foo: {
+      type: Number,
+      default: 123
+    },
+    'some-prop': {
+      type: String,
+      default: 'bar'
+    }
+  },
+  mounted () {
+    console.log(`mounted with foo: ${this.foo}`)
+    console.log(`mounted with someProp: ${this.someProp}`)
+  }
+})
+customElements.define('my-element', window.MyElement)
+</script>

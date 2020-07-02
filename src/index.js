@@ -136,10 +136,14 @@ export default function wrap (Vue, Component) {
       if (!wrapper._isMounted) {
         // initialize attributes
         const syncInitialAttributes = () => {
-          wrapper.props = getInitialProps(camelizedPropsList)
-          hyphenatedPropsList.forEach(key => {
-            syncAttribute(this, key)
-          })
+          const initialProps = getInitialProps(camelizedPropsList, this)
+          const isUndefined = key => initialProps[camelize(key)] === undefined
+          wrapper.props = initialProps
+          hyphenatedPropsList
+            .filter(key => this.hasAttribute(key) || isUndefined(key))
+            .forEach(key => {
+              syncAttribute(this, key)
+            })
         }
 
         if (isInitialized) {
