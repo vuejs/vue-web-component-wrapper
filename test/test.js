@@ -1,5 +1,7 @@
 const launchPage = require('./setup')
 
+/* global el, els, MyElement */
+
 test('properties', async () => {
   const { page } = await launchPage(`properties`)
 
@@ -16,9 +18,9 @@ test('properties', async () => {
     el.foo = 234
     el.someProp = 'lol'
   })
-  const newFoo = await page.evaluate(()  => el.vueComponent.foo)
+  const newFoo = await page.evaluate(() => el.vueComponent.foo)
   expect(newFoo).toBe(234)
-  const newBar = await page.evaluate(()  => el.vueComponent.someProp)
+  const newBar = await page.evaluate(() => el.vueComponent.someProp)
   expect(newBar).toBe('lol')
 })
 
@@ -129,4 +131,27 @@ test('async', async () => {
   expect(await page.evaluate(() => {
     return document.querySelectorAll('my-element')[2].shadowRoot.textContent
   })).toMatch(`456 bar`)
+})
+
+test('mounting manually', async () => {
+  const { page, logs } = await launchPage(`mounting-manually`)
+
+  // mounting programmatically
+  await page.evaluate(() => {
+    window.el = new MyElement()
+    window.el.foo = 234
+    window.el.setAttribute('some-prop', 'lol')
+    window.el.someProp = 'ignored as attribute takes precedence'
+    document.body.appendChild(window.el)
+  })
+
+  // props
+  const foo = await page.evaluate(() => el.vueComponent.foo)
+  expect(foo).toBe(234)
+  const bar = await page.evaluate(() => el.vueComponent.someProp)
+  expect(bar).toBe('lol')
+
+  // lifecycle
+  expect(logs).toContain('mounted with foo: 234')
+  expect(logs).toContain('mounted with someProp: lol')
 })
