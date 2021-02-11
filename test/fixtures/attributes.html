@@ -1,6 +1,6 @@
 <script src="../../node_modules/vue/dist/vue.js"></script>
 <script type="module">
-  import wrap from '../../src/index.js'
+import wrap from '../../src/index.js'
 
 customElements.define('my-element', wrap(Vue, {
   template: `<div>{{ foo }} {{ bar }} {{ someNumber }}</div>`,
@@ -15,6 +15,10 @@ customElements.define('my-element', wrap(Vue, {
       type: Boolean,
       default: true
     },
+    qux: {
+      type: Boolean,
+      default: true
+    },
     someNumber: {
       type: Number
     }
@@ -24,4 +28,4 @@ customElements.define('my-element', wrap(Vue, {
 window.el = document.querySelector('my-element')
 </script>
 
-<my-element foo="foo" bar="true" some-number="123"></my-element>
+<my-element foo="foo" bar="true" qux="false" some-number="123"></my-element>

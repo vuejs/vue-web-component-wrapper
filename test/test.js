@@ -38,6 +38,10 @@ test('attributes', async () => {
   const baz = await page.evaluate(() => el.baz)
   expect(baz).toBe(true)
 
+  // boolean="false" with default: true
+  const qux = await page.evaluate(() => el.qux)
+  expect(qux).toBe(false)
+
   // some-number="123"
   const someNumber = await page.evaluate(() => el.someNumber)
   expect(someNumber).toBe(123)
@@ -46,12 +50,16 @@ test('attributes', async () => {
   await page.evaluate(() => {
     el.setAttribute('foo', 'foo')
     el.setAttribute('bar', 'false')
+    el.setAttribute('baz', 'false')
+    el.setAttribute('qux', '')
     el.setAttribute('some-number', '234')
   })
 
   // boolean="boolean"
   expect(await page.evaluate(() => el.foo)).toBe(true)
   expect(await page.evaluate(() => el.bar)).toBe(false)
+  expect(await page.evaluate(() => el.baz)).toBe(false)
+  expect(await page.evaluate(() => el.qux)).toBe(true)
   expect(await page.evaluate(() => el.someNumber)).toBe(234)
 })
 
