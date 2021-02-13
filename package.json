@@ -4,8 +4,10 @@
   "description": "wrap a vue component as a web component.",
   "main": "dist/vue-wc-wrapper.js",
   "unpkg": "dist/vue-wc-wrapper.global.js",
+  "types": "types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "types/*.d.ts"
   ],
   "scripts": {
     "test": "jest",
