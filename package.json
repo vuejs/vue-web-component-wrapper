@@ -41,6 +41,7 @@
     "yorkie": "^1.0.3"
   },
   "eslintConfig": {
+    "root": true,
     "env": {
       "browser": true
     },
