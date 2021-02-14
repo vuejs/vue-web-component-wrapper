@@ -9,7 +9,7 @@ import {
   convertAttributeValue
 } from './utils.js'
 
-export default function wrap (Vue, Component) {
+export default function wrap (Vue, Component, vueAttributeBeforeRender) {
   const isAsync = typeof Component === 'function' && !Component.cid
   let isInitialized = false
   let hyphenatedPropsList
@@ -83,23 +83,28 @@ export default function wrap (Vue, Component) {
       const self = super()
       self.attachShadow({ mode: 'open' })
 
-      const wrapper = self._wrapper = new Vue({
-        name: 'shadow-root',
-        customElement: self,
-        shadowRoot: self.shadowRoot,
-        data () {
-          return {
-            props: {},
-            slotChildren: []
+      const wrapper = self._wrapper = new Vue(
+        Object.assign(
+          vueAttributeBeforeRender, {
+            name: 'shadow-root',
+            customElement: self,
+            shadowRoot: self.shadowRoot,
+
+            data () {
+              return {
+                props: {},
+                slotChildren: []
+              }
+            },
+
+            render (h) {
+              return h(Component, {
+                ref: 'inner',
+                props: this.props
+              }, this.slotChildren)
+            }
           }
-        },
-        render (h) {
-          return h(Component, {
-            ref: 'inner',
-            props: this.props
-          }, this.slotChildren)
-        }
-      })
+        ))
 
       // Use MutationObserver to react to future attribute & slot content change
       const observer = new MutationObserver(mutations => {

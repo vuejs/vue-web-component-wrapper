@@ -46,6 +46,19 @@ const CustomElement = wrap(Vue, () => import(`MyComponent.vue`))
 
 window.customElements.define('my-element', CustomElement)
 ```
+### Usage with addtional attributes
+```js
+const vueAttributeBeforeRender = {
+        i18n:{ locale: 'de' },
+        foo:{ bar: 'test' },
+}; 
+
+const CustomElement = wrap(Vue, Component, vueAttributeBeforeRender)
+```
+This will add the attribute to the 
+```js  
+new Vue({ // attributes }) 
+```
 
 ## Interface Proxying Details
 
