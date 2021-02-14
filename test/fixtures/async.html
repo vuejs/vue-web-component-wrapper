@@ -5,7 +5,7 @@ import wrap from '../../src/index.js'
 const Component = () => new Promise(resolve => {
   setTimeout(() => {
     resolve({
-      template: `<div>{{ foo }} {{ someProp }}</div>`,
+      template: `<div>{{ foo }} {{ someProp }} {{ extraProp.value }}</div>`,
       props: {
         foo: {
           type: Number,
@@ -14,6 +14,10 @@ const Component = () => new Promise(resolve => {
         'some-prop': {
           type: String,
           default: 'bar'
+        },
+        extraProp: {
+          type: Object,
+          default: () => ({value: 'banana'})
         }
       }
     })
@@ -26,6 +30,7 @@ const Component = () => new Promise(resolve => {
 customElements.define('my-element', wrap(Vue, Component))
 
 window.els = document.querySelectorAll('my-element')
+window.els[1].extraProp = {value: 'apple'}
 </script>
 
 <my-element></my-element>

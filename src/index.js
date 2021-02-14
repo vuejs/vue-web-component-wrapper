@@ -152,6 +152,12 @@ export default function wrap (Vue, Component) {
             }
             initialize(resolved)
             syncInitialAttributes()
+            // sync existing element properties with props
+            camelizedPropsList.forEach(prop => {
+              if (typeof this[prop] !== 'undefined') {
+                wrapper.props[prop] = this[prop]
+              }
+            })
           })
         }
         // initialize children
