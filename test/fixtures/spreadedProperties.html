@@ -1,0 +1,48 @@
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script type="module">
+    import wrap from '../../src/index.js';
+
+    var mixin0 = {
+        props: {
+            m0: {
+                type: String,
+                default: 'm0'
+            }
+        }
+    };
+    var mixin1 = {
+        props: {
+            'm-1': {
+                type: String,
+                default: 'm1'
+            }
+        }
+    };
+    var mixin2 = {
+        props: ['m2a', 'm2b']
+    };
+
+    var Parent0 = {
+        mixins:[mixin0, mixin1, mixin2],
+        props: ['p0']
+    };
+    var Parent1 = {
+        extends: Parent0,
+        props: {
+            'p-1': {
+                type: String,
+                default: 'p1'
+            }
+        }
+    };
+
+    customElements.define('my-element', wrap(Vue, {
+        extends: Parent1,
+        props:['c1', 'c2'],
+        template: `<div> {{p0}} {{p1}} {{m0}} {{m1}} {{c1}}{{c2}}{{m2a}} {{m2b}}</div>`,
+    }));
+
+    window.el = document.querySelector('my-element');
+</script>
+
+<my-element ></my-element>
