@@ -47,7 +47,15 @@
     "env": {
       "browser": true
     },
-    "extends": "plugin:vue-libs/recommended"
+    "extends": "plugin:vue-libs/recommended",
+    "overrides": [
+      {
+        "files": ["test/*"],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
