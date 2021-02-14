@@ -47,6 +47,21 @@ const CustomElement = wrap(Vue, () => import(`MyComponent.vue`))
 window.customElements.define('my-element', CustomElement)
 ```
 
+Further more it is possible to change the class your custom element should inherit from by providing a third parameter. This way you can customize built-in elements as well:
+
+``` js
+import Vue from 'vue'
+import wrap from '@vue/web-component-wrapper'
+
+const ListComponent = {
+  // any component options
+}
+
+const CustomListElement = wrap(Vue, Component, HTMLUListElement)
+
+window.customElements.define('my-list', CustomElement, { extends: 'ul' })
+```
+
 ## Interface Proxying Details
 
 ### Props
