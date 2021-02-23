@@ -107,6 +107,14 @@ test('lifecycle', async () => {
   expect(logs).toContain('activated')
 })
 
+test('options', async () => {
+  const { page } = await launchPage(`options`)
+
+  expect(await page.evaluate(() => {
+    return document.querySelectorAll('my-element')[2].shadowRoot
+  })).toBeNull()
+})
+
 test('async', async () => {
   const { page } = await launchPage(`async`)
 
