@@ -111,7 +111,7 @@ test('options', async () => {
   const { page } = await launchPage(`options`)
 
   expect(await page.evaluate(() => {
-    return document.querySelectorAll('my-element').shadowRoot
+    return document.querySelector('my-element').shadowRoot
   })).toBeNull()
 })
 
