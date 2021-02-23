@@ -1,0 +1,10 @@
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script type="module">
+import wrap from '../../src/index.js'
+
+customElements.define('my-element', wrap(Vue, { template: `<div></div>` }, { shadowMode: 'closed' }))
+
+window.el = document.querySelector('my-element')
+</script>
+
+<my-element></my-element>
