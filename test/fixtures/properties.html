@@ -1,6 +1,6 @@
 <script src="../../node_modules/vue/dist/vue.js"></script>
 <script type="module">
-import wrap from '../../src/index.js'
+import wrap from '../../dist/vue-wc-wrapper.js'
 
 customElements.define('my-element', wrap(Vue, {
   template: `<div>{{ foo }} {{ someProp }}</div>`,

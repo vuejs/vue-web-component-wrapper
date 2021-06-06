@@ -4,13 +4,12 @@
   "description": "wrap a vue component as a web component.",
   "main": "dist/vue-wc-wrapper.js",
   "unpkg": "dist/vue-wc-wrapper.global.js",
-  "types": "types/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "types/*.d.ts"
+    "dist"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "yarn build && jest",
     "lint": "eslint src",
     "build": "rollup -c",
     "prepare": "rollup -c",
@@ -31,15 +30,18 @@
   },
   "homepage": "https://github.com/vuejs/web-component-wrapper#readme",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.2.1",
     "eslint": "^4.16.0",
     "eslint-plugin-vue-libs": "^2.1.0",
     "http-server": "^0.11.1",
     "jest": "^22.1.4",
     "lint-staged": "^6.1.0",
     "puppeteer": "^1.0.0",
-    "rollup": "^0.55.3",
-    "typescript": "^3.2.2",
+    "rollup": "^2.51.0",
+    "tslib": "^2.2.0",
+    "typescript": "^4.3.2",
     "vue": "^2.5.13",
+    "vue-v3": "npm:vue@^3.0.11",
     "yorkie": "^1.0.3"
   },
   "eslintConfig": {
@@ -50,6 +52,9 @@
     },
     "extends": "plugin:vue-libs/recommended"
   },
+  "eslintIgnore": [
+    "dist/**/*"
+  ],
   "gitHooks": {
     "pre-commit": "lint-staged"
   },

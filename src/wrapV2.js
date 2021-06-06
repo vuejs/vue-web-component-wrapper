@@ -9,6 +9,12 @@ import {
   convertAttributeValue
 } from './utils.js'
 
+/**
+ *
+ * @param {import("vue").Vue} Vue
+ * @param {import("vue").Component | import("vue").AsyncComponent} Component
+ * @return {CustomElementConstructor}
+ */
 export default function wrap (Vue, Component) {
   const isAsync = typeof Component === 'function' && !Component.cid
   let isInitialized = false
