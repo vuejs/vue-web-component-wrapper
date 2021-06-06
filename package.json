@@ -45,7 +45,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "browser": true
+      "browser": true,
+      "jest": true
     },
     "extends": "plugin:vue-libs/recommended"
   },
