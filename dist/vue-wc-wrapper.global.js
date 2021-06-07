@@ -1,35 +1,35 @@
 var wrapVueWebComponent = (function () {
-  'use strict'
+  'use strict';
 
-  const camelizeRE = /-(\w)/g
+  const camelizeRE = /-(\w)/g;
   const camelize = str => {
     return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '')
-  }
+  };
 
-  const hyphenateRE = /\B([A-Z])/g
+  const hyphenateRE = /\B([A-Z])/g;
   const hyphenate = str => {
     return str.replace(hyphenateRE, '-$1').toLowerCase()
-  }
+  };
 
   function getInitialProps (propsList) {
-    const res = {}
+    const res = {};
     propsList.forEach(key => {
-      res[key] = undefined
-    })
+      res[key] = undefined;
+    });
     return res
   }
 
   function injectHook (options, key, hook) {
-    options[key] = [].concat(options[key] || [])
-    options[key].unshift(hook)
+    options[key] = [].concat(options[key] || []);
+    options[key].unshift(hook);
   }
 
   function callHooks (vm, hook) {
     if (vm) {
-      const hooks = vm.$options[hook] || []
+      const hooks = vm.$options[hook] || [];
       hooks.forEach(hook => {
-        hook.call(vm)
-      })
+        hook.call(vm);
+      });
     }
   }
 
@@ -41,8 +41,8 @@ var wrapVueWebComponent = (function () {
     })
   }
 
-  const isBoolean = val => /function Boolean/.test(String(val))
-  const isNumber = val => /function Number/.test(String(val))
+  const isBoolean = val => /function Boolean/.test(String(val));
+  const isNumber = val => /function Number/.test(String(val));
 
   function convertAttributeValue (value, name, { type } = {}) {
     if (isBoolean(type)) {
@@ -54,7 +54,7 @@ var wrapVueWebComponent = (function () {
       }
       return value
     } else if (isNumber(type)) {
-      const parsed = parseFloat(value, 10)
+      const parsed = parseFloat(value, 10);
       return isNaN(parsed) ? value : parsed
     } else {
       return value
@@ -62,9 +62,9 @@ var wrapVueWebComponent = (function () {
   }
 
   function toVNodes (h, children) {
-    const res = []
+    const res = [];
     for (let i = 0, l = children.length; i < l; i++) {
-      res.push(toVNode(h, children[i]))
+      res.push(toVNode(h, children[i]));
     }
     return res
   }
@@ -78,10 +78,10 @@ var wrapVueWebComponent = (function () {
         domProps: {
           innerHTML: node.innerHTML
         }
-      }
+      };
       if (data.attrs.slot) {
-        data.slot = data.attrs.slot
-        delete data.attrs.slot
+        data.slot = data.attrs.slot;
+        delete data.attrs.slot;
       }
       return h(node.tagName, data)
     } else {
@@ -90,10 +90,10 @@ var wrapVueWebComponent = (function () {
   }
 
   function getAttributes (node) {
-    const res = {}
+    const res = {};
     for (let i = 0, l = node.attributes.length; i < l; i++) {
-      const attr = node.attributes[i]
-      res[attr.nodeName] = attr.nodeValue
+      const attr = node.attributes[i];
+      res[attr.nodeName] = attr.nodeValue;
     }
     return res
   }
@@ -104,47 +104,47 @@ var wrapVueWebComponent = (function () {
    * @param {import("vue").Component | import("vue").AsyncComponent} Component
    * @return {CustomElementConstructor}
    */
-  function wrap$1 (Vue, Component) {
-    const isAsync = typeof Component === 'function' && !Component.cid
-    let isInitialized = false
-    let hyphenatedPropsList
-    let camelizedPropsList
-    let camelizedPropsMap
+  function wrap$2 (Vue, Component) {
+    const isAsync = typeof Component === 'function' && !Component.cid;
+    let isInitialized = false;
+    let hyphenatedPropsList;
+    let camelizedPropsList;
+    let camelizedPropsMap;
 
     function initialize (Component) {
       if (isInitialized) return
 
       const options = typeof Component === 'function'
         ? Component.options
-        : Component
+        : Component;
 
       // extract props info
       const propsList = Array.isArray(options.props)
         ? options.props
-        : Object.keys(options.props || {})
-      hyphenatedPropsList = propsList.map(hyphenate)
-      camelizedPropsList = propsList.map(camelize)
-      const originalPropsAsObject = Array.isArray(options.props) ? {} : options.props || {}
+        : Object.keys(options.props || {});
+      hyphenatedPropsList = propsList.map(hyphenate);
+      camelizedPropsList = propsList.map(camelize);
+      const originalPropsAsObject = Array.isArray(options.props) ? {} : options.props || {};
       camelizedPropsMap = camelizedPropsList.reduce((map, key, i) => {
-        map[key] = originalPropsAsObject[propsList[i]]
+        map[key] = originalPropsAsObject[propsList[i]];
         return map
-      }, {})
+      }, {});
 
       // proxy $emit to native DOM events
       injectHook(options, 'beforeCreate', function () {
-        const emit = this.$emit
+        const emit = this.$emit;
         this.$emit = (name, ...args) => {
-          this.$root.$options.customElement.dispatchEvent(createCustomEvent(name, args))
+          this.$root.$options.customElement.dispatchEvent(createCustomEvent(name, args));
           return emit.call(this, name, ...args)
-        }
-      })
+        };
+      });
 
       injectHook(options, 'created', function () {
         // sync default props values to wrapper on created
         camelizedPropsList.forEach(key => {
-          this.$root.props[key] = this[key]
-        })
-      })
+          this.$root.props[key] = this[key];
+        });
+      });
 
       // proxy props as Element properties
       camelizedPropsList.forEach(key => {
@@ -153,30 +153,30 @@ var wrapVueWebComponent = (function () {
             return this._wrapper.props[key]
           },
           set (newVal) {
-            this._wrapper.props[key] = newVal
+            this._wrapper.props[key] = newVal;
           },
           enumerable: false,
           configurable: true
-        })
-      })
+        });
+      });
 
-      isInitialized = true
+      isInitialized = true;
     }
 
     function syncAttribute (el, key) {
-      const camelized = camelize(key)
-      const value = el.hasAttribute(key) ? el.getAttribute(key) : undefined
+      const camelized = camelize(key);
+      const value = el.hasAttribute(key) ? el.getAttribute(key) : undefined;
       el._wrapper.props[camelized] = convertAttributeValue(
         value,
         key,
         camelizedPropsMap[camelized]
-      )
+      );
     }
 
     class CustomElement extends HTMLElement {
       constructor () {
-        const self = super()
-        self.attachShadow({ mode: 'open' })
+        const self = super();
+        self.attachShadow({ mode: 'open' });
 
         const wrapper = self._wrapper = new Vue({
           name: 'shadow-root',
@@ -194,32 +194,32 @@ var wrapVueWebComponent = (function () {
               props: this.props
             }, this.slotChildren)
           }
-        })
+        });
 
         // Use MutationObserver to react to future attribute & slot content change
         const observer = new MutationObserver(mutations => {
-          let hasChildrenChange = false
+          let hasChildrenChange = false;
           for (let i = 0; i < mutations.length; i++) {
-            const m = mutations[i]
+            const m = mutations[i];
             if (isInitialized && m.type === 'attributes' && m.target === self) {
-              syncAttribute(self, m.attributeName)
+              syncAttribute(self, m.attributeName);
             } else {
-              hasChildrenChange = true
+              hasChildrenChange = true;
             }
           }
           if (hasChildrenChange) {
             wrapper.slotChildren = Object.freeze(toVNodes(
               wrapper.$createElement,
               self.childNodes
-            ))
+            ));
           }
-        })
+        });
         observer.observe(self, {
           childList: true,
           subtree: true,
           characterData: true,
           attributes: true
-        })
+        });
       }
 
       get vueComponent () {
@@ -227,63 +227,132 @@ var wrapVueWebComponent = (function () {
       }
 
       connectedCallback () {
-        const wrapper = this._wrapper
+        const wrapper = this._wrapper;
         if (!wrapper._isMounted) {
           // initialize attributes
           const syncInitialAttributes = () => {
-            wrapper.props = getInitialProps(camelizedPropsList)
+            wrapper.props = getInitialProps(camelizedPropsList);
             hyphenatedPropsList.forEach(key => {
-              syncAttribute(this, key)
-            })
-          }
+              syncAttribute(this, key);
+            });
+          };
 
           if (isInitialized) {
-            syncInitialAttributes()
+            syncInitialAttributes();
           } else {
             // async & unresolved
             Component().then(resolved => {
               if (resolved.__esModule || resolved[Symbol.toStringTag] === 'Module') {
-                resolved = resolved.default
+                resolved = resolved.default;
               }
-              initialize(resolved)
-              syncInitialAttributes()
-            })
+              initialize(resolved);
+              syncInitialAttributes();
+            });
           }
           // initialize children
           wrapper.slotChildren = Object.freeze(toVNodes(
             wrapper.$createElement,
             this.childNodes
-          ))
-          wrapper.$mount()
-          this.shadowRoot.appendChild(wrapper.$el)
+          ));
+          wrapper.$mount();
+          this.shadowRoot.appendChild(wrapper.$el);
         } else {
-          callHooks(this.vueComponent, 'activated')
+          callHooks(this.vueComponent, 'activated');
         }
       }
 
       disconnectedCallback () {
-        callHooks(this.vueComponent, 'deactivated')
+        callHooks(this.vueComponent, 'deactivated');
       }
     }
 
     if (!isAsync) {
-      initialize(Component)
+      initialize(Component);
     }
 
     return CustomElement
   }
 
-  var isV2 = function (Vue) {
-    var vueMajorVersion = Vue.version.split('.')[0]
-    return vueMajorVersion === '2'
-  }
-  function wrap (Vue, Component) {
-    if (isV2(Vue)) {
-      return wrap$1(Vue, Component)
-    } else {
-      throw new Error('not implemented')
-    }
+  /*! *****************************************************************************
+  Copyright (c) Microsoft Corporation.
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
+  ***************************************************************************** */
+  /* global Reflect, Promise */
+
+  var extendStatics = function(d, b) {
+      extendStatics = Object.setPrototypeOf ||
+          ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+          function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+      return extendStatics(d, b);
+  };
+
+  function __extends(d, b) {
+      if (typeof b !== "function" && b !== null)
+          throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+      extendStatics(d, b);
+      function __() { this.constructor = d; }
+      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   }
 
-  return wrap
-}())
+  function wrap$1(Vue, Component) {
+      /* WIP */
+      var CustomElement = /** @class */ (function (_super) {
+          __extends(CustomElement, _super);
+          function CustomElement() {
+              var _this = _super.call(this) || this;
+              _this.attachShadow({ mode: 'open' });
+              // shadow root was attached with its mode set to open, so this shadow root is nonnull.
+              var shadowRoot = _this.shadowRoot;
+              _this._wrapper = Vue.createApp({
+                  data: function () {
+                      return {
+                          props: {},
+                          slotChildren: []
+                      };
+                  },
+                  render: function () {
+                      return Vue.h(Component, this.props);
+                  }
+              }).mount(shadowRoot.host);
+              return _this;
+          }
+          return CustomElement;
+      }(HTMLElement));
+      return CustomElement;
+  }
+
+  var majorVersion = function (Vue) {
+      if (typeof Vue.version !== 'string') {
+          return null;
+      }
+      return Vue.version.split('.')[0];
+  };
+  var isV2 = function (Vue) {
+      return majorVersion(Vue) === '2';
+  };
+  var isV3 = function (Vue) {
+      return majorVersion(Vue) === '3';
+  };
+  function wrap(Vue, Component) {
+      if (isV2(Vue)) {
+          return wrap$2(Vue, Component);
+      }
+      if (isV3(Vue)) {
+          return wrap$1(Vue, Component);
+      }
+      throw new Error('supported vue version is v2 or v3.');
+  }
+
+  return wrap;
+
+}());
