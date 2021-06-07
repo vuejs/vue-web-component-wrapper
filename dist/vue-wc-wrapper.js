@@ -95,7 +95,13 @@ function getAttributes (node) {
   return res
 }
 
-function wrap (Vue, Component) {
+/**
+ *
+ * @param {import("vue").Vue} Vue
+ * @param {import("vue").Component | import("vue").AsyncComponent} Component
+ * @return {CustomElementConstructor}
+ */
+function wrap$2 (Vue, Component) {
   const isAsync = typeof Component === 'function' && !Component.cid;
   let isInitialized = false;
   let hyphenatedPropsList;
@@ -262,6 +268,86 @@ function wrap (Vue, Component) {
   }
 
   return CustomElement
+}
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+function wrap$1(Vue, Component) {
+    /* WIP */
+    var CustomElement = /** @class */ (function (_super) {
+        __extends(CustomElement, _super);
+        function CustomElement() {
+            var _this = _super.call(this) || this;
+            _this.attachShadow({ mode: 'open' });
+            // shadow root was attached with its mode set to open, so this shadow root is nonnull.
+            var shadowRoot = _this.shadowRoot;
+            _this._wrapper = Vue.createApp({
+                data: function () {
+                    return {
+                        props: {},
+                        slotChildren: []
+                    };
+                },
+                render: function () {
+                    return Vue.h(Component, this.props);
+                }
+            }).mount(shadowRoot.host);
+            return _this;
+        }
+        return CustomElement;
+    }(HTMLElement));
+    return CustomElement;
+}
+
+var majorVersion = function (Vue) {
+    if (typeof Vue.version !== 'string') {
+        return null;
+    }
+    return Vue.version.split('.')[0];
+};
+var isV2 = function (Vue) {
+    return majorVersion(Vue) === '2';
+};
+var isV3 = function (Vue) {
+    return majorVersion(Vue) === '3';
+};
+function wrap(Vue, Component) {
+    if (isV2(Vue)) {
+        return wrap$2(Vue, Component);
+    }
+    if (isV3(Vue)) {
+        return wrap$1(Vue, Component);
+    }
+    throw new Error('supported vue version is v2 or v3.');
 }
 
 export default wrap;
