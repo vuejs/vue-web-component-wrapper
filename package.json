@@ -18,18 +18,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/web-component-wrapper.git"
+    "url": "git+https://github.com/vuejs/vue-web-component-wrapper.git"
   },
   "keywords": [
-    "vue",
+    "vue", 
     "web-component"
   ],
   "author": "Evan You",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vuejs/web-component-wrapper/issues"
+    "url": "https://github.com/vuejs/vue-web-component-wrapper/issues"
   },
-  "homepage": "https://github.com/vuejs/web-component-wrapper#readme",
+  "homepage": "https://github.com/vuejs/vue-web-component-wrapper#readme",
   "devDependencies": {
     "eslint": "^4.16.0",
     "eslint-plugin-vue-libs": "^2.1.0",
