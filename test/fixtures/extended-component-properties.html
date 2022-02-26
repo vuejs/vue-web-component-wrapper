@@ -1,0 +1,26 @@
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script type="module">
+import wrap from '../../src/index.js'
+
+const component = {
+  template: `<div>{{ foo }} {{ someProp }}</div>`,
+  props: {
+    foo: {
+      type: Number,
+      default: 123
+    },
+    'some-prop': {
+      type: String,
+      default: 'bar'
+    }
+  }
+}
+
+customElements.define('my-element', wrap(Vue, {
+  extends: component,
+}))
+
+window.el = document.querySelector('my-element')
+</script>
+
+<my-element></my-element>

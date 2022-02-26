@@ -11,6 +11,10 @@ import {
 
 export default function wrap (Vue, Component) {
   const isAsync = typeof Component === 'function' && !Component.cid
+
+  if (!isAsync && Component.extends && Vue.util.mergeOptions) {
+    Component = Vue.util.mergeOptions(Component, Component.extends)
+  }
   let isInitialized = false
   let hyphenatedPropsList
   let camelizedPropsList
