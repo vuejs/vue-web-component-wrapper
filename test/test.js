@@ -23,6 +23,29 @@ test('properties', async () => {
   expect(newBar).toBe('lol')
 })
 
+test('extended-component-properties', async () => {
+  const { page } = await launchPage(`extended-component-properties`)
+
+  // props proxying: get
+  const foo = await page.evaluate(() => el.foo)
+  expect(foo).toBe(123)
+
+  // get camelCase
+  const someProp = await page.evaluate(() => el.someProp)
+  expect(someProp).toBe('bar')
+
+  // props proxying: set
+  await page.evaluate(() => {
+    el.foo = 234
+    el.someProp = 'lol'
+  })
+  const newFoo = await page.evaluate(() => el.vueComponent.foo)
+
+  expect(newFoo).toBe(234)
+  const newBar = await page.evaluate(() => el.vueComponent.someProp)
+  expect(newBar).toBe('lol')
+})
+
 test('attributes', async () => {
   const { page } = await launchPage(`attributes`)
 
