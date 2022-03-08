@@ -9,7 +9,7 @@ import {
   convertAttributeValue
 } from './utils.js'
 
-export default function wrap (Vue, Component) {
+export default function wrap (Vue, Component, plugin) {
   const isAsync = typeof Component === 'function' && !Component.cid
   let isInitialized = false
   let hyphenatedPropsList
@@ -85,6 +85,7 @@ export default function wrap (Vue, Component) {
 
       const wrapper = self._wrapper = new Vue({
         name: 'shadow-root',
+        ...(plugin && {...plugin}),
         customElement: self,
         shadowRoot: self.shadowRoot,
         data () {
