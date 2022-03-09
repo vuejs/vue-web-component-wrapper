@@ -78,14 +78,22 @@ export default function wrap (Vue, Component, plugin) {
     )
   }
 
+  const _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+  function _isObjectEmpty(obj) {
+    return (
+      Object.prototype.toString.call(obj) === '[object Object]' &&
+      JSON.stringify(obj) === '{}'
+    );  
+  }
+
   class CustomElement extends HTMLElement {
     constructor () {
       const self = super()
       self.attachShadow({ mode: 'open' })
 
-      const wrapper = self._wrapper = new Vue({
+      const vueProps = _extends({
         name: 'shadow-root',
-        ...(plugin && {...plugin}),
         customElement: self,
         shadowRoot: self.shadowRoot,
         data () {
@@ -100,7 +108,9 @@ export default function wrap (Vue, Component, plugin) {
             props: this.props
           }, this.slotChildren)
         }
-      })
+      }, !_isObjectEmpty(plugin) && _extends({}, plugin));
+
+      const wrapper = self._wrapper = new Vue(vueProps)
 
       // Use MutationObserver to react to future attribute & slot content change
       const observer = new MutationObserver(mutations => {
