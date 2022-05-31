@@ -137,6 +137,15 @@ function wrap (Vue, Component) {
       });
     });
 
+    // proxy methods as Element methods
+    Object.keys(options.methods || {}).forEach(key => {
+      Object.defineProperty(CustomElement.prototype, key, {
+        value (...args) {
+          return options.methods[key].call(this.vueComponent, ...args)
+        }
+      });
+    });
+
     // proxy props as Element properties
     camelizedPropsList.forEach(key => {
       Object.defineProperty(CustomElement.prototype, key, {
