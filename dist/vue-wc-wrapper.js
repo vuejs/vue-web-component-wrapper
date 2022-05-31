@@ -141,9 +141,7 @@ function wrap (Vue, Component) {
     Object.keys(options.methods || {}).forEach(key => {
       Object.defineProperty(CustomElement.prototype, key, {
         value (...args) {
-          // _wrapper.$refs.inner
           return options.methods[key].call(this.vueComponent, ...args)
-          //return this.vueComponent[key](...args)
         }
       });
     });
