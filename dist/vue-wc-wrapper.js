@@ -137,6 +137,17 @@ function wrap (Vue, Component) {
       });
     });
 
+    // proxy methods as Element methods
+    Object.keys(options.methods || {}).forEach(key => {
+      Object.defineProperty(CustomElement.prototype, key, {
+        value (...args) {
+          // _wrapper.$refs.inner
+          return options.methods[key].call(this.vueComponent, ...args)
+          //return this.vueComponent[key](...args)
+        }
+      });
+    });
+
     // proxy props as Element properties
     camelizedPropsList.forEach(key => {
       Object.defineProperty(CustomElement.prototype, key, {
@@ -264,4 +275,4 @@ function wrap (Vue, Component) {
   return CustomElement
 }
 
-export default wrap;
+export { wrap as default };
