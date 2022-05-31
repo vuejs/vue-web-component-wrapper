@@ -273,4 +273,4 @@ function wrap (Vue, Component) {
   return CustomElement
 }
 
-export { wrap as default };
+export default wrap;

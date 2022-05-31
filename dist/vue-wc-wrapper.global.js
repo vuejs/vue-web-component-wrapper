@@ -278,4 +278,4 @@ function wrap (Vue, Component) {
 
 return wrap;
 
-})();
+}());
