@@ -1,6 +1,6 @@
 # @vue/web-component-wrapper [![CircleCI](https://circleci.com/gh/vuejs/vue-web-component-wrapper.svg?style=shield)](https://circleci.com/gh/vuejs/vue-web-component-wrapper)
 
-> Wrap and register a Vue component as a custom element.
+> (Vue 2 only) Wrap and register a Vue component as a custom element.
 
 ## Compatibility
 
